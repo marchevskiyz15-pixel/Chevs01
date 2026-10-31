@@ -1,0 +1,2171 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Chefs 01</title>
+<meta name="description" content="Chefs 01: заказы закусок на выезд, расчёт, закупка и лист повару">
+<meta name="theme-color" content="#F5F2E4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#181B0E" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Chefs 01">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+</head>
+<body>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Jost:wght@300;400;500&display=swap">
+<style>
+/* Layout: светлая шапка с веткой оливы, под ней один поток: таблица по алфавиту, закупка, прайс, заметки. Закрепляемая панель заказа внизу. */
+:root{
+  --bg:#F5F2E4;
+  --surface:#FBF9F0;
+  --surface-2:#EDEAD3;
+  --line:#DAD6B8;
+  --ink:#2C3019;
+  --ink-2:#5F6342;
+  --olive:#66702E;
+  --olive-deep:#4A5421;
+  --olive-soft:#D7DBAE;
+  --olive-wash:#E9EBCD;
+  --amber:#8A5E0E;
+  --amber-wash:#F1E3BC;
+  --sky-low:#F3F0DA;
+  --sun:#EDD27A;
+  --sun-glow:#F6E7A8;
+  --leaf:#B3BD78;
+  --mt-far:#CDD4A4;
+  --mt-near:#B4BE86;
+  --sea:#BBD0C3;
+  --sea-lt:#E0EBDF;
+  --sea-2:#A9C2B2;
+  --sea-3:#97B3A3;
+  --sea-4:#86A593;
+  --sea-5:#7A9B88;
+  --foam:#FBF9F0;
+  --cliff:#A3AA74;
+  --cliff-lt:#C6CB98;
+  --cliff-dk:#8A925C;
+  --castle:#7A8541;
+  --castle-dk:#5A6530;
+  --win:#F4F0D8;
+  --bird:#4A5421;
+  --plate:#EBE7CC;
+  --paper:#FFFEF8;--paper-ink:#2C3019;--paper-ink2:#676B48;--paper-line:#E3DFC6;--paper-olive:#5A6428;--paper-amber:#8A5E0E;
+  --f-crust:#C98F4B;--f-crustD:#AE7737;--f-bread:#EBC98A;--f-breadL:#F3DDAE;--f-toast:#EFD39A;--f-toastD:#C9974F;--f-rye:#6E4B31;--f-ryeL:#8C6446;--f-ryeD:#4F3420;--f-shell:#E6BB72;--f-shellD:#C48E4C;--f-shellL:#F0D39B;--f-cream:#F8F2DE;--f-creamD:#E0D5B2;--f-red:#D5502F;--f-redD:#A93822;--f-redL:#F7A285;--f-salm:#F1946F;--f-salmD:#D9714F;--f-salmL:#F8BEA3;--f-shr:#F3A47D;--f-shrD:#D5805A;--f-grn:#86A04A;--f-grnD:#5E7733;--f-grnL:#B0C46F;--f-avo:#BFCF78;--f-avoD:#6F8C3A;--f-yel:#F1C84A;--f-yelD:#D9A92E;--f-egg:#FBF7E8;--f-eggD:#E2D8B6;--f-ham:#EBB0A6;--f-hamD:#C9837A;--f-hamL:#F5CDC5;--f-sal:#B84A3B;--f-salD:#8A3026;--f-salH:#9E2F24;--f-fat:#F3D7C6;--f-chs:#F3D172;--f-chsD:#D2A63C;--f-chsM:#E5BE50;--f-chdT:#F0B24C;--f-chdL:#C98A2B;--f-chdR:#DE9E3C;--f-blue:#EFEBDA;--f-blueD:#CFC8AC;--f-blueM:#E0D9C0;--f-vein:#6F86A8;--f-pine:#F3D865;--f-pineD:#C9A934;--f-pineM:#E2C34A;--f-tom:#DA4630;--f-tomD:#AF2F20;--f-tomL:#F4A26C;--f-olG:#A1B04C;--f-olB:#3F3C2B;--f-olH:#8D8A62;--f-grapeG:#BCCD6F;--f-grapeR:#8E3E62;--f-str:#D53C4A;--f-apple:#F3F2D6;--f-orange:#F09A3C;--f-orangeL:#F8C57F;--f-kiwi:#93B34D;--f-kiwiL:#E3ECB8;--f-beet:#9C2D5B;--f-pot:#F4E4B2;--f-car:#F09B3E;--f-herr:#D8D2C4;--f-herrD:#A9A08A;--f-mayo:#FCF8E8;--f-chick:#EBD5AC;--f-chickD:#D4B47E;--f-corn:#F2CD4E;--f-peas:#86A64F;--f-crab:#E8685A;--f-cuc:#A9C46C;--f-cucD:#5F7F33;--f-cucC:#E1EDB6;--f-roast:#C0705C;--f-roastD:#8F4A3A;--f-roastL:#DE9F8B;--f-bacon:#C9604F;--f-herring:#D8D2C4;--f-onion:#A9558F;--f-wood:#C9A56A;--f-glass:#FFFFFF;--f-line:#7C7F58;--f-moz:#FBF8EC;--f-mozD:#DCD4B6;--f-sesame:#4A3B2A;--f-syr:#E8B761;--f-syrD:#C08435;--f-syrL:#F6D894;--f-lem:#E9C53A;--f-lemD:#E2B92E;--f-lemL:#F8EB98;--f-sauceCh:#DE4A33;--f-pepper:#3A352B;
+  --f-display:'Jost','Segoe UI',Helvetica,Arial,sans-serif;
+  --f-body:'Golos Text','Segoe UI',Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#181B0E;--surface:#202414;--surface-2:#2A2F1A;--line:#3A4025;--ink:#EDEAD3;--ink-2:#B0B28D;
+    --olive:#B4BE6A;--olive-deep:#D4DB98;--olive-soft:#3B4220;--olive-wash:#2A3018;--amber:#E0B25A;--amber-wash:#3B2F14;
+    --sky-low:#1D2314;--sun:#D5BF68;--sun-glow:#6F6430;--leaf:#5A6A30;--mt-far:#2E381F;--mt-near:#242C17;--sea:#1E3731;--sea-lt:#2C4C45;--sea-2:#244139;--sea-3:#1B352E;--sea-4:#162D27;--sea-5:#12251F;--foam:#9DB7A6;--cliff:#38421F;--cliff-lt:#56622F;--cliff-dk:#2B3319;--castle:#4A5630;--castle-dk:#343E20;--win:#E0C879;--bird:#EDEAD3;--plate:#2A2F1A;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#181B0E;--surface:#202414;--surface-2:#2A2F1A;--line:#3A4025;--ink:#EDEAD3;--ink-2:#B0B28D;
+  --olive:#B4BE6A;--olive-deep:#D4DB98;--olive-soft:#3B4220;--olive-wash:#2A3018;--amber:#E0B25A;--amber-wash:#3B2F14;
+  --sky-low:#1D2314;--sun:#D5BF68;--sun-glow:#6F6430;--leaf:#5A6A30;--mt-far:#2E381F;--mt-near:#242C17;--sea:#1E3731;--sea-lt:#2C4C45;--sea-2:#244139;--sea-3:#1B352E;--sea-4:#162D27;--sea-5:#12251F;--foam:#9DB7A6;--cliff:#38421F;--cliff-lt:#56622F;--cliff-dk:#2B3319;--castle:#4A5630;--castle-dk:#343E20;--win:#E0C879;--bird:#EDEAD3;--plate:#2A2F1A;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.in{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--olive);outline-offset:2px;border-radius:6px}
+
+/* шапка */
+.hero{--sh:clamp(190px,21vw,250px);position:relative;background:linear-gradient(180deg,var(--olive-wash) 0%,var(--bg) 100%);overflow:hidden}
+.hero .in{position:relative;z-index:2;padding-block:clamp(2rem,6vw,4rem) clamp(1.6rem,4vw,2.6rem)}
+.hero h1{font:300 clamp(2.4rem,7vw,4.4rem)/1.02 var(--f-display);letter-spacing:-.015em;color:var(--olive-deep);margin:0 0 1rem;text-wrap:balance}
+.lead{max-width:46ch;font-size:1.08rem;color:var(--ink);margin:0 0 1.4rem}
+.legend{display:flex;flex-wrap:wrap;gap:.6rem 1.4rem;list-style:none;margin:0;padding:0;font-size:.88rem;color:var(--ink-2)}
+.legend li{display:flex;align-items:center;gap:.5rem;min-width:0}
+.branch{position:absolute;right:-30px;top:-10px;width:min(52vw,460px);height:auto;z-index:1;transform-origin:100% 0;pointer-events:none}
+.branch .st{stroke:var(--olive);fill:none;stroke-width:2.4;stroke-linecap:round;opacity:.6}
+.branch .lf{fill:var(--leaf)}
+.branch .ol{fill:var(--olive);opacity:.7}
+.c-sun{fill:var(--sun)}
+.sunhi{fill:var(--sun-glow);opacity:.6}
+.ray{stroke:var(--sun);stroke-width:3.2;stroke-linecap:round;opacity:.75}
+.rays,.halo{transform-box:fill-box;transform-origin:center}
+
+/* сцена: горы, море, замок */
+.scene{position:relative;z-index:1;height:var(--sh);pointer-events:none}
+.scene svg{position:absolute;display:block;overflow:hidden}
+.mtn{left:0;width:100%;bottom:50%;height:58%}
+.sea{left:0;width:100%;bottom:0;height:50%}
+.castle{left:calc(max(0px,(100% - 1080px)/2) + 16px);bottom:calc(var(--sh)*.14);height:calc(var(--sh)*.76);width:auto;aspect-ratio:300/190}
+.sea-front{left:0;width:100%;bottom:-2px;height:calc(var(--sh)*.26 + 2px)}
+.c-mtf{fill:var(--mt-far)}
+.c-mtn{fill:var(--mt-near)}
+.c-sea{fill:var(--sea)}
+.c-s2{fill:var(--sea-2)}
+.c-s3{fill:var(--sea-3)}
+.c-s4{fill:var(--sea-4)}
+.c-s5{fill:var(--sea-5)}
+.c-bg{fill:var(--bg)}
+.c-cliff{fill:var(--cliff)}
+.c-cliffd{fill:var(--cliff-dk);opacity:.55}
+.c-castle{fill:var(--castle)}
+.c-dk{fill:var(--castle-dk)}
+.c-win{fill:var(--win)}
+.c-bird{fill:var(--bird)}
+.c-flag{fill:var(--sun)}
+.cliffl{stroke:var(--cliff-lt);fill:none;stroke-width:3;stroke-linecap:round;opacity:.7}
+.pole{stroke:var(--castle-dk);stroke-width:1.6;stroke-linecap:round}
+.foam{fill:none;stroke:var(--foam);stroke-width:2.4;stroke-linecap:round;stroke-dasharray:.1 18 7 34 .1 24 5 46;vector-effect:non-scaling-stroke;opacity:.7}
+.foamd{fill:var(--foam);opacity:.8;transform-box:fill-box;transform-origin:center}
+.wingL{transform-box:fill-box;transform-origin:100% 100%}
+.wingR{transform-box:fill-box;transform-origin:0% 100%}
+.flag{transform-box:fill-box;transform-origin:0 50%}
+@media (prefers-reduced-motion:no-preference){
+  .branch{animation:sway 9s ease-in-out infinite}
+  @keyframes sway{0%,100%{transform:rotate(-1.4deg)}50%{transform:rotate(1.4deg)}}
+  .rays{animation:spin 120s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .ray{animation:tw 5s ease-in-out infinite}
+  .ray:nth-child(odd){animation-delay:-2.5s}
+  @keyframes tw{0%,100%{opacity:.3}50%{opacity:.95}}
+  .halo{animation:breathe 7s ease-in-out infinite}
+  @keyframes breathe{0%,100%{transform:scale(.93)}50%{transform:scale(1.07)}}
+  .wl{animation:wl 16s linear infinite}
+  .wr{animation:wr 16s linear infinite}
+  @keyframes wl{to{transform:translateX(-300px)}}
+  @keyframes wr{to{transform:translateX(300px)}}
+  .foam{animation:fd 6s linear infinite}
+  @keyframes fd{to{stroke-dashoffset:-134}}
+  .foamd{animation:pulse 3.4s ease-in-out infinite}
+  .foamd:nth-of-type(2){animation-delay:-1.1s}
+  .foamd:nth-of-type(3){animation-delay:-2.2s}
+  @keyframes pulse{0%,100%{opacity:.25;transform:scaleX(.7)}50%{opacity:.9;transform:scaleX(1.15)}}
+  .bird{animation:drift 9s ease-in-out infinite}
+  @keyframes drift{0%,100%{transform:translate(0,0)}25%{transform:translate(10px,-5px)}50%{transform:translate(20px,1px)}75%{transform:translate(9px,5px)}}
+  .wingL{animation:flapL .85s ease-in-out infinite}
+  .wingR{animation:flapR .85s ease-in-out infinite}
+  @keyframes flapL{0%,100%{transform:rotate(26deg)}50%{transform:rotate(-34deg)}}
+  @keyframes flapR{0%,100%{transform:rotate(-26deg)}50%{transform:rotate(34deg)}}
+  .flag{animation:flagw 2.4s ease-in-out infinite}
+  @keyframes flagw{0%,100%{transform:scaleX(1) skewY(0)}50%{transform:scaleX(.78) skewY(9deg)}}
+}
+
+/* теги */
+.tag{display:inline-block;font:500 .72rem/1 var(--f-body);padding:.28rem .55rem;border-radius:99px;white-space:nowrap}
+.tag.vv{background:var(--olive-soft);color:var(--olive-deep)}
+.tag.est{background:var(--amber-wash);color:var(--amber)}
+
+section{padding-block:clamp(1.6rem,4vw,2.6rem)}
+h2{font:400 clamp(1.5rem,3.4vw,2rem)/1.15 var(--f-display);color:var(--olive-deep);margin:0 0 .4rem;text-wrap:balance}
+.sub{color:var(--ink-2);margin:0 0 1.2rem;max-width:62ch}
+
+/* управление */
+.controls{display:flex;flex-wrap:wrap;gap:.8rem 1rem;align-items:center;margin-bottom:1rem}
+.search{flex:1 1 220px;min-width:0;max-width:360px;background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:.6rem 1rem;transition:border-color .25s,box-shadow .25s}
+.search:focus{outline:none;border-color:var(--olive);box-shadow:0 0 0 3px var(--olive-soft)}
+.chips{display:flex;flex-wrap:wrap;gap:.45rem}
+.chip-b{border:1px solid var(--line);background:transparent;border-radius:99px;padding:.42rem .85rem;font-size:.86rem;color:var(--ink-2);cursor:pointer;transition:background .25s,color .25s,border-color .25s}
+.chip-b:hover{background:var(--olive-wash);color:var(--olive-deep)}
+.chip-b[aria-pressed="true"]{background:var(--olive);border-color:var(--olive);color:var(--bg)}
+.chip-b .n{opacity:.7;margin-left:.3rem;font-variant-numeric:tabular-nums}
+
+/* таблица закусок */
+table{width:100%;border-collapse:separate;border-spacing:0}
+.dishes>thead th{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);text-align:right;font:500 .78rem/1.2 var(--f-body);color:var(--ink-2);padding:.7rem .75rem;border-bottom:1px solid var(--olive)}
+.dishes>thead th:first-child{text-align:left;padding-left:0}
+.dishes>tbody>tr>td{padding:.9rem .75rem;border-bottom:1px solid var(--line);vertical-align:top;transition:background .3s}
+.dishes>tbody>tr>td:first-child{padding-left:0}
+.dishes>tbody>tr>td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.dishes>tbody>tr.dish:hover>td{background:var(--olive-wash)}
+.tg{display:flex;align-items:flex-start;gap:.6rem;background:none;border:0;padding:0;text-align:left;cursor:pointer;font:500 1rem/1.3 var(--f-body);color:var(--ink)}
+.chev{flex:none;width:.55rem;height:.55rem;margin-top:.42rem;border-right:2px solid var(--olive);border-bottom:2px solid var(--olive);transform:rotate(-45deg);transition:transform .35s cubic-bezier(.3,.7,.2,1)}
+tr.open .chev{transform:rotate(45deg)}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .6rem;margin:.45rem 0 .2rem 1.15rem;font-size:.78rem;color:var(--ink-2)}
+.chip{background:var(--olive-soft);color:var(--olive-deep);border-radius:99px;padding:.18rem .6rem;font-weight:500}
+.chk{background:var(--amber-wash);color:var(--amber);border-radius:99px;padding:.18rem .6rem;font-weight:500}
+.ds{margin:.15rem 0 0 1.15rem;color:var(--ink-2);font-size:.88rem;max-width:58ch}
+.q{width:5.2rem;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.4rem .5rem;text-align:right;font-variant-numeric:tabular-nums;transition:border-color .25s,box-shadow .25s}
+.q:focus{outline:none;border-color:var(--olive);box-shadow:0 0 0 3px var(--olive-soft)}
+.q.has{border-color:var(--olive);background:var(--olive-wash)}
+.dishes>tbody>tr.detail>td{padding:0;border-bottom:0}
+.dtl{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s cubic-bezier(.3,.7,.2,1)}
+tr.open + tr.detail .dtl{grid-template-rows:1fr}
+.dtl>div{overflow:hidden;min-height:0}
+.box{margin:0 0 1rem 1.15rem;padding:.9rem 1.1rem;background:var(--surface);border:1px solid var(--line);border-radius:14px;max-width:640px}
+.box.note{margin-top:.6rem}
+.box table td,.box table th{padding:.4rem .5rem;font-size:.86rem;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;vertical-align:top}
+.box table th{font-weight:500;color:var(--ink-2);font-size:.74rem;background:none;position:static;border-bottom:1px solid var(--olive)}
+.box table td:first-child,.box table th:first-child{text-align:left;padding-left:0}
+.box tfoot td{border-bottom:0;font-weight:600;color:var(--olive-deep)}
+.pk{color:var(--ink-2);font-size:.76rem}
+.warn{margin:.7rem 0 0;font-size:.84rem;color:var(--amber)}
+.empty{padding:2rem 0;color:var(--ink-2)}
+
+/* закупка и прайс */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:clamp(.9rem,3vw,1.4rem)}
+.shop td,.shop th,.prices td,.prices th{padding:.55rem .6rem;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;vertical-align:top;font-size:.9rem}
+.shop th,.prices th{font:500 .76rem/1.2 var(--f-body);color:var(--ink-2);border-bottom:1px solid var(--olive)}
+.shop td:first-child,.shop th:first-child,.prices td:first-child,.prices th:first-child{text-align:left;padding-left:0}
+.shop tfoot td{font-weight:600;color:var(--olive-deep);border-bottom:0}
+.sm{display:block;font-size:.76rem;color:var(--ink-2);font-weight:400}
+.pi{width:6.2rem;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:.3rem .45rem;text-align:right;font-variant-numeric:tabular-nums;transition:border-color .25s,background .25s}
+.pi:focus{outline:none;border-color:var(--olive);box-shadow:0 0 0 3px var(--olive-soft)}
+.pi.chg{border-color:var(--amber);background:var(--amber-wash)}
+.btns{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}
+.btn{background:var(--olive);color:var(--bg);border:0;border-radius:99px;padding:.6rem 1.2rem;font-weight:500;cursor:pointer;transition:background .25s,transform .25s}
+.btn:hover{background:var(--olive-deep)}
+.btn.ghost{background:transparent;color:var(--olive-deep);border:1px solid var(--olive)}
+.btn.ghost:hover{background:var(--olive-wash)}
+.note-list{margin:0;padding-left:1.2rem;display:grid;gap:.6rem;max-width:68ch}
+.fold>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.fold>summary::-webkit-details-marker{display:none}
+.fold>summary h2{margin:0}
+.fold .fsub{display:block;font-size:.86rem;color:var(--ink-2);margin-top:.25rem}
+.fold .chev{flex:none;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;color:var(--olive-deep);transition:transform .25s}
+.fold[open] .chev{transform:rotate(180deg)}
+.fold[open]>summary{margin-bottom:1rem}
+.fold .legend{margin:0 0 1rem}
+.fold>summary:focus-visible{outline:2px solid var(--olive);outline-offset:4px;border-radius:8px}
+.note-list li::marker{color:var(--olive)}
+
+/* панель заказа */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--olive);box-shadow:0 -8px 24px rgba(40,46,15,.08)}
+.barin{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1.4rem;padding-block:.65rem calc(.65rem + env(safe-area-inset-bottom,0px))}
+.barin label{display:flex;align-items:center;gap:.5rem;font-size:.86rem;color:var(--ink-2)}
+.g{width:4.2rem;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:.3rem .45rem;text-align:right}
+.bs{display:flex;flex-direction:column;line-height:1.2;min-width:0}
+.bs b{font:500 1.05rem var(--f-display);color:var(--olive-deep);font-variant-numeric:tabular-nums}
+.bs span{font-size:.76rem;color:var(--ink-2)}
+.barin .btn{margin-left:auto;padding:.5rem 1rem}
+main{padding-bottom:7rem}
+
+/* шторка навигации */
+.dishes>tbody>tr.dish{scroll-margin-top:3.6rem}
+section{scroll-margin-top:.5rem}
+.dishes>tbody>tr.flash>td{animation:flash 1.8s ease-out}
+@keyframes flash{0%{background:var(--olive-soft)}100%{background:transparent}}
+.navtab{position:fixed;right:env(safe-area-inset-right,0px);top:38%;z-index:25;writing-mode:vertical-rl;background:var(--olive);color:var(--bg);border:0;border-radius:14px 0 0 14px;padding:1.1rem .7rem;font:500 .84rem/1 var(--f-body);letter-spacing:.08em;cursor:pointer;box-shadow:-4px 6px 18px rgba(40,46,15,.2);transition:background .25s,transform .4s cubic-bezier(.3,.7,.2,1),padding .25s}
+.navtab:hover{background:var(--olive-deep);padding-right:.95rem}
+body.dopen{overflow:hidden}
+body.dopen .navtab{transform:translateX(120%)}
+.scrim{position:fixed;inset:0;z-index:30;background:rgba(30,34,12,.4);opacity:0;pointer-events:none;transition:opacity .35s}
+.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;z-index:31;width:min(380px,90vw);background:var(--surface);border-left:1px solid var(--olive);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-right:env(safe-area-inset-right,0px);transform:translateX(105%);visibility:hidden;transition:transform .45s cubic-bezier(.3,.7,.2,1),visibility 0s linear .45s}
+.drawer.open{transform:none;visibility:visible;transition-delay:0s;box-shadow:-12px 0 36px rgba(30,34,12,.25)}
+.dh{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.1rem .5rem}
+.dh h2{font-size:1.35rem;margin:0}
+.x{width:2.2rem;height:2.2rem;border-radius:50%;border:1px solid var(--line);background:none;font-size:1.3rem;line-height:1;cursor:pointer;color:var(--olive-deep);transition:background .25s}
+.x:hover{background:var(--olive-wash)}
+.db{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:0 1.1rem 1rem}
+.db h3{font:500 .78rem/1.2 var(--f-body);color:var(--ink-2);margin:1.2rem 0 .55rem}
+.dsearch{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:.55rem .95rem;transition:border-color .25s,box-shadow .25s}
+.dsearch:focus{outline:none;border-color:var(--olive);box-shadow:0 0 0 3px var(--olive-soft)}
+.secs{display:grid;gap:.1rem}
+.secs button{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:.6rem .1rem;cursor:pointer;color:var(--ink);transition:background .25s,padding .25s}
+.secs button::after{content:"";width:.5rem;height:.5rem;border-right:2px solid var(--olive);border-top:2px solid var(--olive);transform:rotate(45deg);flex:none}
+.secs button:hover{background:var(--olive-wash);padding-left:.5rem}
+.dgroups{display:flex;flex-wrap:wrap;gap:.4rem}
+.dletters{display:flex;flex-wrap:wrap;gap:.35rem}
+.lt{width:2.1rem;height:2.1rem;border-radius:50%;border:1px solid var(--line);background:none;cursor:pointer;font:500 .88rem var(--f-body);color:var(--olive-deep);transition:background .25s,color .25s,border-color .25s}
+.lt:hover{background:var(--olive);border-color:var(--olive);color:var(--bg)}
+.dlist{list-style:none;margin:0;padding:0}
+.di{display:flex;justify-content:space-between;align-items:flex-start;gap:.7rem;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:.6rem .1rem;cursor:pointer;font-size:.88rem;line-height:1.35;color:var(--ink);transition:background .25s,padding .25s}
+.di:hover{background:var(--olive-wash);padding-left:.5rem}
+.qb{flex:none;background:var(--olive);color:var(--bg);border-radius:99px;font-size:.72rem;line-height:1;padding:.22rem .55rem;font-variant-numeric:tabular-nums}
+.dempty{padding:.8rem 0;color:var(--ink-2)}
+.df{display:flex;gap:1.6rem;padding:.8rem 1.1rem calc(.8rem + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);background:var(--surface)}
+
+
+/* картинки закусок и премиум */
+.nm{display:flex;gap:.85rem;align-items:flex-start}
+.nb{min-width:0}
+.art{flex:none;width:88px;aspect-ratio:4/3;display:block;margin-top:-.2rem}
+.art svg,.sa svg{width:100%;height:100%;display:block}
+.prem{background:var(--olive-deep);color:var(--bg);border-radius:99px;padding:.18rem .6rem;font-weight:500;font-size:.78rem;letter-spacing:.02em;white-space:nowrap}
+.a-crust{fill:var(--f-crust)}
+.s-crust{stroke:var(--f-crust);fill:none}
+.a-crustD{fill:var(--f-crustD)}
+.s-crustD{stroke:var(--f-crustD);fill:none}
+.a-bread{fill:var(--f-bread)}
+.s-bread{stroke:var(--f-bread);fill:none}
+.a-breadL{fill:var(--f-breadL)}
+.s-breadL{stroke:var(--f-breadL);fill:none}
+.a-toast{fill:var(--f-toast)}
+.s-toast{stroke:var(--f-toast);fill:none}
+.a-toastD{fill:var(--f-toastD)}
+.s-toastD{stroke:var(--f-toastD);fill:none}
+.a-rye{fill:var(--f-rye)}
+.s-rye{stroke:var(--f-rye);fill:none}
+.a-ryeL{fill:var(--f-ryeL)}
+.s-ryeL{stroke:var(--f-ryeL);fill:none}
+.a-ryeD{fill:var(--f-ryeD)}
+.s-ryeD{stroke:var(--f-ryeD);fill:none}
+.a-shell{fill:var(--f-shell)}
+.s-shell{stroke:var(--f-shell);fill:none}
+.a-shellD{fill:var(--f-shellD)}
+.s-shellD{stroke:var(--f-shellD);fill:none}
+.a-shellL{fill:var(--f-shellL)}
+.s-shellL{stroke:var(--f-shellL);fill:none}
+.a-cream{fill:var(--f-cream)}
+.s-cream{stroke:var(--f-cream);fill:none}
+.a-creamD{fill:var(--f-creamD)}
+.s-creamD{stroke:var(--f-creamD);fill:none}
+.a-red{fill:var(--f-red)}
+.s-red{stroke:var(--f-red);fill:none}
+.a-redD{fill:var(--f-redD)}
+.s-redD{stroke:var(--f-redD);fill:none}
+.a-redL{fill:var(--f-redL)}
+.s-redL{stroke:var(--f-redL);fill:none}
+.a-salm{fill:var(--f-salm)}
+.s-salm{stroke:var(--f-salm);fill:none}
+.a-salmD{fill:var(--f-salmD)}
+.s-salmD{stroke:var(--f-salmD);fill:none}
+.a-salmL{fill:var(--f-salmL)}
+.s-salmL{stroke:var(--f-salmL);fill:none}
+.a-shr{fill:var(--f-shr)}
+.s-shr{stroke:var(--f-shr);fill:none}
+.a-shrD{fill:var(--f-shrD)}
+.s-shrD{stroke:var(--f-shrD);fill:none}
+.a-grn{fill:var(--f-grn)}
+.s-grn{stroke:var(--f-grn);fill:none}
+.a-grnD{fill:var(--f-grnD)}
+.s-grnD{stroke:var(--f-grnD);fill:none}
+.a-grnL{fill:var(--f-grnL)}
+.s-grnL{stroke:var(--f-grnL);fill:none}
+.a-avo{fill:var(--f-avo)}
+.s-avo{stroke:var(--f-avo);fill:none}
+.a-avoD{fill:var(--f-avoD)}
+.s-avoD{stroke:var(--f-avoD);fill:none}
+.a-yel{fill:var(--f-yel)}
+.s-yel{stroke:var(--f-yel);fill:none}
+.a-yelD{fill:var(--f-yelD)}
+.s-yelD{stroke:var(--f-yelD);fill:none}
+.a-egg{fill:var(--f-egg)}
+.s-egg{stroke:var(--f-egg);fill:none}
+.a-eggD{fill:var(--f-eggD)}
+.s-eggD{stroke:var(--f-eggD);fill:none}
+.a-ham{fill:var(--f-ham)}
+.s-ham{stroke:var(--f-ham);fill:none}
+.a-hamD{fill:var(--f-hamD)}
+.s-hamD{stroke:var(--f-hamD);fill:none}
+.a-hamL{fill:var(--f-hamL)}
+.s-hamL{stroke:var(--f-hamL);fill:none}
+.a-sal{fill:var(--f-sal)}
+.s-sal{stroke:var(--f-sal);fill:none}
+.a-salD{fill:var(--f-salD)}
+.s-salD{stroke:var(--f-salD);fill:none}
+.a-salH{fill:var(--f-salH)}
+.s-salH{stroke:var(--f-salH);fill:none}
+.a-fat{fill:var(--f-fat)}
+.s-fat{stroke:var(--f-fat);fill:none}
+.a-chs{fill:var(--f-chs)}
+.s-chs{stroke:var(--f-chs);fill:none}
+.a-chsD{fill:var(--f-chsD)}
+.s-chsD{stroke:var(--f-chsD);fill:none}
+.a-chsM{fill:var(--f-chsM)}
+.s-chsM{stroke:var(--f-chsM);fill:none}
+.a-chdT{fill:var(--f-chdT)}
+.s-chdT{stroke:var(--f-chdT);fill:none}
+.a-chdL{fill:var(--f-chdL)}
+.s-chdL{stroke:var(--f-chdL);fill:none}
+.a-chdR{fill:var(--f-chdR)}
+.s-chdR{stroke:var(--f-chdR);fill:none}
+.a-blue{fill:var(--f-blue)}
+.s-blue{stroke:var(--f-blue);fill:none}
+.a-blueD{fill:var(--f-blueD)}
+.s-blueD{stroke:var(--f-blueD);fill:none}
+.a-blueM{fill:var(--f-blueM)}
+.s-blueM{stroke:var(--f-blueM);fill:none}
+.a-vein{fill:var(--f-vein)}
+.s-vein{stroke:var(--f-vein);fill:none}
+.a-pine{fill:var(--f-pine)}
+.s-pine{stroke:var(--f-pine);fill:none}
+.a-pineD{fill:var(--f-pineD)}
+.s-pineD{stroke:var(--f-pineD);fill:none}
+.a-pineM{fill:var(--f-pineM)}
+.s-pineM{stroke:var(--f-pineM);fill:none}
+.a-tom{fill:var(--f-tom)}
+.s-tom{stroke:var(--f-tom);fill:none}
+.a-tomD{fill:var(--f-tomD)}
+.s-tomD{stroke:var(--f-tomD);fill:none}
+.a-tomL{fill:var(--f-tomL)}
+.s-tomL{stroke:var(--f-tomL);fill:none}
+.a-olG{fill:var(--f-olG)}
+.s-olG{stroke:var(--f-olG);fill:none}
+.a-olB{fill:var(--f-olB)}
+.s-olB{stroke:var(--f-olB);fill:none}
+.a-olH{fill:var(--f-olH)}
+.s-olH{stroke:var(--f-olH);fill:none}
+.a-grapeG{fill:var(--f-grapeG)}
+.s-grapeG{stroke:var(--f-grapeG);fill:none}
+.a-grapeR{fill:var(--f-grapeR)}
+.s-grapeR{stroke:var(--f-grapeR);fill:none}
+.a-str{fill:var(--f-str)}
+.s-str{stroke:var(--f-str);fill:none}
+.a-apple{fill:var(--f-apple)}
+.s-apple{stroke:var(--f-apple);fill:none}
+.a-orange{fill:var(--f-orange)}
+.s-orange{stroke:var(--f-orange);fill:none}
+.a-orangeL{fill:var(--f-orangeL)}
+.s-orangeL{stroke:var(--f-orangeL);fill:none}
+.a-kiwi{fill:var(--f-kiwi)}
+.s-kiwi{stroke:var(--f-kiwi);fill:none}
+.a-kiwiL{fill:var(--f-kiwiL)}
+.s-kiwiL{stroke:var(--f-kiwiL);fill:none}
+.a-beet{fill:var(--f-beet)}
+.s-beet{stroke:var(--f-beet);fill:none}
+.a-pot{fill:var(--f-pot)}
+.s-pot{stroke:var(--f-pot);fill:none}
+.a-car{fill:var(--f-car)}
+.s-car{stroke:var(--f-car);fill:none}
+.a-herr{fill:var(--f-herr)}
+.s-herr{stroke:var(--f-herr);fill:none}
+.a-herrD{fill:var(--f-herrD)}
+.s-herrD{stroke:var(--f-herrD);fill:none}
+.a-mayo{fill:var(--f-mayo)}
+.s-mayo{stroke:var(--f-mayo);fill:none}
+.a-chick{fill:var(--f-chick)}
+.s-chick{stroke:var(--f-chick);fill:none}
+.a-chickD{fill:var(--f-chickD)}
+.s-chickD{stroke:var(--f-chickD);fill:none}
+.a-corn{fill:var(--f-corn)}
+.s-corn{stroke:var(--f-corn);fill:none}
+.a-peas{fill:var(--f-peas)}
+.s-peas{stroke:var(--f-peas);fill:none}
+.a-crab{fill:var(--f-crab)}
+.s-crab{stroke:var(--f-crab);fill:none}
+.a-cuc{fill:var(--f-cuc)}
+.s-cuc{stroke:var(--f-cuc);fill:none}
+.a-cucD{fill:var(--f-cucD)}
+.s-cucD{stroke:var(--f-cucD);fill:none}
+.a-cucC{fill:var(--f-cucC)}
+.s-cucC{stroke:var(--f-cucC);fill:none}
+.a-roast{fill:var(--f-roast)}
+.s-roast{stroke:var(--f-roast);fill:none}
+.a-roastD{fill:var(--f-roastD)}
+.s-roastD{stroke:var(--f-roastD);fill:none}
+.a-roastL{fill:var(--f-roastL)}
+.s-roastL{stroke:var(--f-roastL);fill:none}
+.a-bacon{fill:var(--f-bacon)}
+.s-bacon{stroke:var(--f-bacon);fill:none}
+.a-herring{fill:var(--f-herring)}
+.s-herring{stroke:var(--f-herring);fill:none}
+.a-onion{fill:var(--f-onion)}
+.s-onion{stroke:var(--f-onion);fill:none}
+.a-wood{fill:var(--f-wood)}
+.s-wood{stroke:var(--f-wood);fill:none}
+.a-glass{fill:var(--f-glass)}
+.s-glass{stroke:var(--f-glass);fill:none}
+.a-line{fill:var(--f-line)}
+.s-line{stroke:var(--f-line);fill:none}
+.a-moz{fill:var(--f-moz)}
+.s-moz{stroke:var(--f-moz);fill:none}
+.a-mozD{fill:var(--f-mozD)}
+.s-mozD{stroke:var(--f-mozD);fill:none}
+.a-sesame{fill:var(--f-sesame)}
+.s-sesame{stroke:var(--f-sesame);fill:none}
+.a-syr{fill:var(--f-syr)}
+.s-syr{stroke:var(--f-syr);fill:none}
+.a-syrD{fill:var(--f-syrD)}
+.s-syrD{stroke:var(--f-syrD);fill:none}
+.a-syrL{fill:var(--f-syrL)}
+.s-syrL{stroke:var(--f-syrL);fill:none}
+.a-lem{fill:var(--f-lem)}
+.s-lem{stroke:var(--f-lem);fill:none}
+.a-lemD{fill:var(--f-lemD)}
+.s-lemD{stroke:var(--f-lemD);fill:none}
+.a-lemL{fill:var(--f-lemL)}
+.s-lemL{stroke:var(--f-lemL);fill:none}
+.a-sauceCh{fill:var(--f-sauceCh)}
+.s-sauceCh{stroke:var(--f-sauceCh);fill:none}
+.a-pepper{fill:var(--f-pepper)}
+.s-pepper{stroke:var(--f-pepper);fill:none}
+.a-plate{fill:var(--plate)}
+.a-shadow{fill:var(--f-ryeD);opacity:.13}
+.a-glassT{fill:var(--f-glass);opacity:.16}
+
+/* расчёт */
+body.copen{overflow:hidden}
+body.copen .navtab{transform:translateX(120%)}
+.calc{position:fixed;inset:0;z-index:40;background:var(--bg);overflow-y:auto;overscroll-behavior:contain;opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .35s,transform .45s cubic-bezier(.3,.7,.2,1),visibility 0s linear .45s;padding-bottom:calc(2rem + env(safe-area-inset-bottom,0px))}
+.calc.open{opacity:1;visibility:visible;transform:none;transition-delay:0s}
+.ctop{position:sticky;top:0;z-index:2;background:var(--bg);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.ctopin{display:flex;align-items:center;gap:.8rem 1rem;padding-block:.75rem}
+.ctopin h2{margin:0;font-size:1.5rem}
+.ctabs{display:flex;gap:.25rem;background:var(--surface-2);border-radius:99px;padding:.25rem;margin-left:auto}
+.ctabs button{border:0;background:none;border-radius:99px;padding:.45rem 1.05rem;cursor:pointer;color:var(--ink-2);font-weight:500;transition:background .25s,color .25s}
+.ctabs button:hover{color:var(--olive-deep)}
+.ctabs button[aria-selected="true"]{background:var(--olive);color:var(--bg)}
+.cgrid{display:grid;grid-template-columns:minmax(250px,300px) minmax(0,1fr);gap:1.4rem;align-items:start;padding-top:1.4rem}
+.cside{display:grid;gap:1rem;position:sticky;top:5.2rem}
+.cset{display:grid;gap:.75rem}
+.fld{display:flex;justify-content:space-between;align-items:center;gap:.8rem;font-size:.88rem;color:var(--ink-2)}
+.fld.wide{flex-direction:column;align-items:stretch;gap:.35rem}
+.iw{display:inline-flex;align-items:center;gap:.3rem;color:var(--olive-deep);font-weight:500}
+.cset input{width:6.2rem;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:.35rem .5rem;text-align:right;font-variant-numeric:tabular-nums;transition:border-color .25s,box-shadow .25s}
+.fld.wide input{width:100%;text-align:left}
+.cset input:focus{outline:none;border-color:var(--olive);box-shadow:0 0 0 3px var(--olive-soft)}
+.hint{margin:0;font-size:.78rem;color:var(--ink-2)}
+.econ h3{font:500 1.1rem var(--f-display);color:var(--olive-deep);margin:0 0 .15rem}
+.econ .hint{margin-bottom:.4rem}
+.erow{display:flex;justify-content:space-between;gap:1rem;padding:.45rem 0;border-bottom:1px solid var(--line);font-size:.9rem;font-variant-numeric:tabular-nums}
+.erow b{font-weight:500}
+.erow.tot{border-bottom:0;color:var(--olive-deep)}
+.erow.tot b{font:500 1.15rem var(--f-display)}
+.erow.neg b{color:var(--amber)}
+.erow + .hint{margin-top:.2rem}
+.cact{display:flex;flex-wrap:wrap;gap:.6rem}
+.cact .hint{flex-basis:100%}
+.btn:disabled{opacity:.45;cursor:default}
+.cmain{min-width:0}
+
+/* лист для печати */
+.sheet{display:none;--plate:#F0EDD9;background:var(--paper);color:var(--paper-ink);border:1px solid var(--paper-line);border-radius:16px;padding:clamp(1rem,3.4vw,2.2rem);box-shadow:0 10px 30px rgba(40,46,15,.08)}
+.sheet.on{display:block}
+.sh{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem 2rem;align-items:flex-end;border-bottom:2px solid var(--paper-olive);padding-bottom:1rem;margin-bottom:.4rem}
+.sk{margin:0;font:500 .72rem var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--paper-olive)}
+.sh h3{font:300 clamp(1.7rem,4vw,2.4rem)/1.1 var(--f-display);margin:.25rem 0 0;color:var(--paper-ink)}
+.sev{margin:.3rem 0 0;color:var(--paper-ink2)}
+.smeta{display:flex;gap:1.4rem;margin:0}
+.smeta dt{font-size:.72rem;color:var(--paper-ink2)}
+.smeta dd{margin:0;font-weight:500;font-variant-numeric:tabular-nums}
+.sheet h4{font:400 1.2rem var(--f-display);color:var(--paper-olive);margin:1.6rem 0 .3rem}
+.st{width:100%;font-size:.88rem;color:var(--paper-ink)}
+.st td,.st b{color:var(--paper-ink)}
+.st th{font:500 .72rem/1.2 var(--f-body);color:var(--paper-ink2);text-align:right;padding:.55rem .5rem;border-bottom:1px solid var(--paper-olive);white-space:nowrap}
+.st td{padding:.45rem .5rem;border-bottom:1px solid var(--paper-line);text-align:right;vertical-align:middle;font-variant-numeric:tabular-nums}
+.st .tl{text-align:left}
+.st .sa{width:68px;padding-left:0;padding-right:.3rem}
+.st td.sa svg{width:64px;height:48px}
+.st b{font-weight:500}
+.sd{display:block;font-size:.78rem;color:var(--paper-ink2);margin-top:.15rem;line-height:1.35}
+.sd.il{display:inline;margin:0}
+.swarn{display:block;font-size:.76rem;color:var(--paper-amber);margin-top:.2rem}
+.sg td{text-align:left;font:500 .74rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--paper-olive);padding-top:1.1rem}
+.st tfoot td{font-weight:600;border-bottom:0;padding-top:.8rem;color:var(--paper-olive)}
+.sheet .prem{background:var(--paper-olive);color:var(--paper);font-size:.7rem;padding:.12rem .5rem;vertical-align:1px}
+.snote{margin:1rem 0 0;font-size:.8rem;color:var(--paper-ink2)}
+.st .sb{width:1.6rem;padding-left:0;padding-right:.2rem;text-align:left}
+.cbx{display:inline-block;width:14px;height:14px;border:1.5px solid var(--paper-ink2);border-radius:3px;vertical-align:middle}
+.sn{font:500 1.05rem var(--f-display)}
+.sempty{color:var(--paper-ink2)}
+.sempty p{margin:0}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+body.dl{background:var(--bg);padding:24px 16px}
+body.dl .sheet{max-width:860px;margin:0 auto}
+@page{size:A4;margin:12mm}
+@media print{
+  body{background:#fff!important}
+  body::before{display:none}
+  body.copen>*:not(#calc){display:none!important}
+  body.copen .calc{position:static;opacity:1;visibility:visible;transform:none;overflow:visible;padding:0;background:#fff}
+  .no-print,.ctop{display:none!important}
+  .cgrid{display:block;padding:0;max-width:none}
+  .sheet{border:0;box-shadow:none;padding:0;border-radius:0;background:#fff}
+  .st tr{break-inside:avoid}
+  .sh,.sheet h4{break-after:avoid}
+  body.dl{padding:0}
+  *{print-color-adjust:exact;-webkit-print-color-adjust:exact}
+}
+
+
+/* ===== Chefs 01 ===== */
+.kick{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;margin:0 0 .5rem;font:500 .8rem var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--olive)}
+.hat{width:1.7rem;height:1.7rem;color:var(--olive-deep);flex:none}
+.ver{background:var(--amber-wash);color:var(--amber);border-radius:99px;padding:.18rem .6rem;font-size:.66rem;letter-spacing:.06em}
+.vrow{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;width:100%}
+.views{display:inline-flex;gap:.2rem;background:var(--surface-2);border-radius:99px;padding:.22rem}
+.views button{border:0;background:none;border-radius:99px;padding:.42rem .95rem;cursor:pointer;color:var(--ink-2);font-weight:500;font-size:.88rem;transition:background .25s,color .25s}
+.views button:hover{color:var(--olive-deep)}
+.views button[aria-pressed="true"]{background:var(--olive);color:var(--bg)}
+.ordf{border:1px dashed var(--olive);background:none;border-radius:99px;padding:.42rem .9rem;font-size:.86rem;color:var(--olive-deep);cursor:pointer;transition:background .25s,color .25s}
+.ordf span{font-variant-numeric:tabular-nums;font-weight:600;margin-left:.15rem}
+.ordf[aria-pressed="true"]{background:var(--olive-deep);color:var(--bg);border-style:solid}
+body.v-shelf .dishes,body.v-grid .dishes{display:none}
+.shelves{display:grid;grid-template-columns:minmax(0,1fr);gap:1.3rem}
+.shelf{min-width:0}
+.shh{display:flex;align-items:baseline;gap:.6rem;margin-bottom:.55rem}
+.shh h3{margin:0;font:400 1.3rem var(--f-display);color:var(--olive-deep)}
+.shn{font-size:.8rem;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.shall{margin-left:auto;border:0;background:none;color:var(--olive);font-weight:500;cursor:pointer;font-size:.86rem;padding:.3rem 0}
+.shall:hover{color:var(--olive-deep)}
+.srow{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(148px,172px);gap:.7rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:.25rem .15rem .9rem;margin-inline:-.15rem;scrollbar-width:thin;scrollbar-color:var(--line) transparent;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.srow .tile{scroll-snap-align:start}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:.75rem}
+.tgrid:empty,.shelves:empty{display:none}
+.tile{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:.55rem .6rem .6rem;display:flex;flex-direction:column;gap:.4rem;transition:border-color .25s,box-shadow .25s;scroll-margin-top:14px}
+.tile:hover{border-color:var(--olive-soft)}
+.tile.on{border-color:var(--olive);box-shadow:0 0 0 2px var(--olive-soft)}
+.tile.flash{animation:tflash 1.6s ease}
+@keyframes tflash{0%,40%{box-shadow:0 0 0 4px var(--amber-wash);border-color:var(--amber)}}
+.topen{display:flex;flex-direction:column;gap:.35rem;background:none;border:0;padding:0;text-align:left;cursor:pointer;color:var(--ink);width:100%}
+.tart{display:block;aspect-ratio:4/3;width:100%;transition:transform .35s cubic-bezier(.3,.7,.2,1)}
+.topen:hover .tart{transform:scale(1.04) rotate(-1deg)}
+.tart svg{width:100%;height:100%;display:block}
+.tnm{font:500 .86rem/1.25 var(--f-body);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;min-height:3.75em}
+.tmeta{display:flex;justify-content:space-between;font-size:.78rem;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.tmeta span:last-child{color:var(--olive-deep);font-weight:600}
+.tq{display:flex;align-items:center;justify-content:space-between;background:var(--surface-2);border-radius:99px;padding:.18rem}
+.tq button{width:2.25rem;height:2.25rem;border-radius:50%;border:0;background:var(--surface);color:var(--olive-deep);font-size:1.2rem;line-height:1;cursor:pointer;transition:background .2s,color .2s,transform .15s}
+.tq button:active{transform:scale(.9)}
+.tq button:disabled{opacity:.35;cursor:default}
+.tile.on .qplus{background:var(--olive);color:var(--bg)}
+.qv{font:500 1.02rem var(--f-display);font-variant-numeric:tabular-nums;min-width:2ch;text-align:center}
+.tprem{position:absolute;top:.5rem;left:.5rem;z-index:1;background:var(--olive-deep);color:var(--bg);border-radius:99px;padding:.12rem .5rem;font-size:.66rem;font-weight:500;letter-spacing:.02em}
+.vempty{color:var(--ink-2);padding:1rem 0;margin:0}
+/* шкала А–Я */
+.az{position:fixed;right:max(3px,env(safe-area-inset-right,0px));top:15vh;bottom:calc(215px + env(safe-area-inset-bottom,0px));z-index:22;display:none;flex-direction:column;justify-content:space-between;align-items:center;width:30px;padding:.45rem 0;border-radius:99px;background:var(--surface);border:1px solid var(--line);box-shadow:0 6px 18px rgba(40,46,15,.12);touch-action:none;user-select:none;-webkit-user-select:none;cursor:pointer}
+.az span{font:600 .7rem/1 var(--f-body);color:var(--olive-deep);flex:1;display:flex;align-items:center;justify-content:center;width:22px;max-height:26px;border-radius:50%}
+.az span.cur{color:var(--bg);background:var(--olive)}
+body.azon .az{display:flex}
+body.azon .navtab{top:auto;bottom:calc(86px + env(safe-area-inset-bottom,0px))}
+body.dopen .az,body.copen .az,body.sopen .az{display:none}
+.azb{position:fixed;right:58px;top:50%;width:76px;height:76px;margin-top:-38px;border-radius:50%;background:var(--olive);color:var(--bg);font:400 2.3rem/76px var(--f-display);text-align:center;z-index:23;opacity:0;transform:scale(.6);transition:opacity .15s,transform .2s cubic-bezier(.3,.7,.2,1);pointer-events:none;box-shadow:0 10px 30px rgba(40,46,15,.25)}
+.azb.on{opacity:1;transform:none}
+/* карточка блюда */
+.dsheet{position:fixed;inset:0;z-index:45;display:flex;align-items:flex-end;justify-content:center;background:rgba(24,27,14,.45);opacity:0;visibility:hidden;transition:opacity .3s,visibility 0s linear .3s}
+.dsheet.open{opacity:1;visibility:visible;transition-delay:0s}
+.dsbox{position:relative;background:var(--bg);width:min(720px,100%);max-height:90vh;max-height:90dvh;overflow-y:auto;overscroll-behavior:contain;border-radius:24px 24px 0 0;padding:.55rem max(16px,env(safe-area-inset-right,0px)) calc(1.4rem + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));transform:translateY(40px);transition:transform .45s cubic-bezier(.3,.7,.2,1);box-shadow:0 -10px 40px rgba(24,27,14,.25)}
+.dsheet.open .dsbox{transform:none}
+.dsgrab{width:46px;height:5px;border-radius:9px;background:var(--line);margin:.15rem auto .8rem}
+.dsbox>.x{position:absolute;right:max(14px,env(safe-area-inset-right,0px));top:.8rem;background:var(--bg)}
+.dshead{display:flex;gap:1rem;align-items:center;padding-right:2.6rem}
+.dsart{flex:none;width:136px;aspect-ratio:4/3}
+.dsart svg{width:100%;height:100%;display:block}
+.dsk{margin:0 0 .2rem;font-size:.76rem;color:var(--olive);font-weight:500;letter-spacing:.04em}
+.dshead h3{margin:0 0 .25rem;font:400 1.32rem/1.2 var(--f-display);color:var(--olive-deep);text-wrap:balance}
+.dsd{margin:0;font-size:.86rem;color:var(--ink-2)}
+.dsnums{display:flex;gap:1.5rem;flex-wrap:wrap;margin:1rem 0 .85rem;padding:0}
+.dsnums div{display:flex;flex-direction:column;font-size:.76rem;color:var(--ink-2)}
+.dsnums dt{margin:0}
+.dsnums dd{margin:0;font:500 1.18rem var(--f-display);color:var(--olive-deep);font-variant-numeric:tabular-nums}
+.dsq{display:flex;flex-wrap:wrap;gap:.45rem;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:.55rem .65rem;margin-bottom:.9rem}
+.dsq label{font-size:.86rem;color:var(--ink-2);margin-right:auto}
+.dsq input{width:4.6rem;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:.38rem .45rem;text-align:right;font-variant-numeric:tabular-nums}
+.dsq input:focus{outline:none;border-color:var(--olive);box-shadow:0 0 0 3px var(--olive-soft)}
+.dsq button{border:1px solid var(--line);background:var(--bg);border-radius:99px;padding:.38rem .75rem;cursor:pointer;color:var(--olive-deep);font-weight:500;transition:background .2s}
+.dsq button:hover{background:var(--olive-wash)}
+.dstabs{display:flex;gap:.25rem;background:var(--surface-2);border-radius:99px;padding:.22rem;margin-bottom:.85rem}
+.dstabs button{flex:1;border:0;background:none;border-radius:99px;padding:.48rem .8rem;cursor:pointer;color:var(--ink-2);font-weight:500;transition:background .25s,color .25s}
+.dstabs button[aria-selected="true"]{background:var(--olive);color:var(--bg)}
+body.sopen{overflow:hidden}
+body.sopen .navtab{transform:translateX(120%)}
+.ck h4{font:500 .76rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--olive);margin:1.05rem 0 .45rem}
+.ck h4:first-child{margin-top:.2rem}
+.cks{margin:0;padding-left:1.25rem;display:grid;gap:.38rem;font-size:.92rem}
+.cks li::marker{color:var(--olive);font-weight:600}
+.ckt{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem;margin-top:1rem}
+.ckt div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:.6rem .7rem}
+.ckt b{display:block;font:500 .84rem var(--f-body);color:var(--olive-deep);margin-bottom:.2rem}
+.ckt p{margin:0;font-size:.82rem;color:var(--ink-2)}
+.ck>p{margin:0;font-size:.9rem}
+.ckm{margin:0;padding-left:1.1rem;font-size:.9rem;display:grid;gap:.25rem}
+.ckm li::marker{color:var(--amber)}
+/* раздел «Повару» */
+.cook-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.8rem;margin-bottom:1.1rem}
+.rule{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:.75rem .85rem;transition:border-color .25s}
+.rule:hover{border-color:var(--olive-soft)}
+.rule summary{list-style:none;cursor:pointer;display:flex;gap:.75rem;align-items:center}
+.rule summary::-webkit-details-marker{display:none}
+.rart{flex:none;width:70px;aspect-ratio:4/3}
+.rart svg{width:100%;height:100%;display:block}
+.rule h3{margin:0;font:500 1.02rem var(--f-display);color:var(--olive-deep)}
+.rule .when{margin:.15rem 0 .1rem;font-size:.8rem;color:var(--amber);font-weight:500}
+.rn{font-size:.74rem;color:var(--ink-2)}
+.rule[open] summary{margin-bottom:.7rem}
+.rule dl{margin:0;display:grid;gap:.5rem;font-size:.85rem}
+.rule dt{font-weight:500;color:var(--olive-deep)}
+.rule dd{margin:0;color:var(--ink-2)}
+.quiz{margin-bottom:1rem}
+.qzk{margin:0 0 .2rem;font:500 .74rem var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--olive)}
+.quiz h3{margin:0;font:400 1.35rem/1.25 var(--f-display);color:var(--olive-deep)}
+.qzbar{height:6px;border-radius:9px;background:var(--surface-2);overflow:hidden;margin-bottom:.6rem}
+.qzbar span{display:block;height:100%;background:var(--olive);transition:width .35s}
+.qzn{margin:0 0 .45rem;font-size:.78rem;color:var(--ink-2)}
+.qzart{width:160px;aspect-ratio:4/3;margin:.1rem 0 .6rem}
+.qzart svg{width:100%;height:100%;display:block}
+.quiz h4{font:400 1.18rem/1.3 var(--f-display);margin:0 0 .8rem;color:var(--ink);text-wrap:balance}
+.qzo{display:grid;gap:.5rem}
+.qzo button{text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:.72rem .9rem;cursor:pointer;font-size:.92rem;color:var(--ink);transition:border-color .2s,background .2s}
+.qzo button:hover:not(:disabled){border-color:var(--olive)}
+.qzo button:disabled{cursor:default}
+.qzo button.ok{border-color:var(--olive);background:var(--olive-wash);color:var(--olive-deep);font-weight:500}
+.qzo button.bad{border-color:var(--amber);background:var(--amber-wash);color:var(--amber)}
+.qzwhy{margin:.85rem 0 0;font-size:.88rem;color:var(--ink-2)}
+.qzres{display:flex;gap:1.2rem;align-items:center;flex-wrap:wrap}
+.qzring{--p:0;width:112px;height:112px;border-radius:50%;background:conic-gradient(var(--olive) calc(var(--p) * 1%),var(--surface-2) 0);display:grid;place-items:center;flex:none}
+.qzring b{width:86px;height:86px;border-radius:50%;background:var(--surface);display:grid;place-items:center;font:400 1.6rem var(--f-display);color:var(--olive-deep)}
+.qzmiss{margin:1rem 0 0;padding-left:1.1rem;font-size:.86rem;display:grid;gap:.4rem;color:var(--ink-2)}
+.qzmiss b{color:var(--olive-deep);font-weight:500}
+.dessert{display:flex;gap:1rem;align-items:center;text-decoration:none;color:inherit;transition:border-color .25s,transform .25s}
+.dessert:hover{border-color:var(--olive)}
+.dessert b{display:block;font:500 1.05rem var(--f-display);color:var(--olive-deep)}
+.dessert span{font-size:.86rem;color:var(--ink-2)}
+.dessert .arr{margin-left:auto;font-size:1.3rem;color:var(--olive)}
+.pop{flex:none;width:40px;height:54px}
+
+/* узкий экран */
+@media (max-width:720px){
+  .dishes>thead{display:none}
+  .dishes,.dishes>tbody{display:block}
+  .dishes>tbody>tr.dish{display:grid;grid-template-columns:repeat(3,1fr);gap:.3rem .6rem;padding:1rem 0;border-bottom:1px solid var(--line)}
+  .dishes>tbody>tr.dish>td{display:block;border:0;padding:0;background:none!important}
+  .dishes>tbody>tr.dish>td.name{grid-column:1/-1}
+  .dishes>tbody>tr.dish>td.num{text-align:left}
+  .dishes>tbody>tr.dish>td.num::before{content:attr(data-l);display:block;font-size:.72rem;color:var(--ink-2);font-family:var(--f-body)}
+  .dishes>tbody>tr.dish>td.qty{grid-column:1/-1;display:flex;align-items:center;gap:.6rem;margin-top:.5rem}
+  .dishes>tbody>tr.dish>td.qty::before{display:inline}
+  .dishes>tbody>tr.detail,.dishes>tbody>tr.detail>td{display:block}
+  .box{margin-left:0}
+  .barin .btn{margin-left:0}
+  .shop table,.prices table{font-size:.85rem}
+  .tbl-wrap{overflow-x:auto}
+  .branch{width:70vw;opacity:.75}
+  main.in{padding-right:max(32px,env(safe-area-inset-right,0px))}
+  .dishes>tbody>tr.dish{scroll-margin-top:1rem}
+}
+
+@media (max-width:860px){
+  .cgrid{grid-template-columns:1fr}
+  .cside{position:static}
+  .cmain{order:-1}
+}
+@media (max-width:720px){
+  .art{width:62px}
+  .nm{gap:.65rem}
+  .ctopin{flex-wrap:wrap}
+  .ctopin h2{font-size:1.25rem}
+  .ctabs{order:3;margin-left:0;width:100%}
+  .ctabs button{flex:1}
+  #cClose{margin-left:auto}
+  .st{font-size:.8rem}
+  .st td,.st th{padding:.45rem .3rem}
+  .st .sa{width:48px}
+  .st td.sa svg{width:46px;height:35px}
+  .smeta{gap:1rem}
+}
+@media (max-width:520px){
+  .st .cw{display:none}
+}
+
+@media (max-width:720px){
+  .views{flex:1}
+  .views button{flex:1;padding-inline:.5rem}
+  .tgrid{grid-template-columns:repeat(2,minmax(0,1fr));padding-right:30px}
+  .srow{grid-auto-columns:42vw}
+  .ckt{grid-template-columns:1fr}
+  .dsart{width:104px}
+  .dshead h3{font-size:1.15rem}
+}
+
+/* ===== CRM: заказы ===== */
+#orders{padding-bottom:.4rem}
+.oh{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:.8rem}
+.oh h2{margin:0}
+#oChips{margin-bottom:.8rem}
+#oChips:empty{display:none}
+.olist{display:grid;gap:.55rem}
+.osm{padding:.4rem 0}
+.orow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:.8rem;align-items:center;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--olive-soft);border-radius:16px;padding:.7rem .85rem;cursor:pointer;color:var(--ink);font:inherit;transition:border-color .25s,transform .15s}
+.orow:hover{border-color:var(--olive-soft)}
+.orow:active{transform:scale(.99)}
+.orow.act{box-shadow:0 0 0 2px var(--olive)}
+.onum{font:500 1.05rem var(--f-display);color:var(--olive-deep);font-variant-numeric:tabular-nums}
+.omid{display:grid;min-width:0}
+.omid b{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.omid span{font-size:.8rem;color:var(--ink-2)}
+.oend{display:grid;justify-items:end;gap:.2rem}
+.oend b{font:500 1rem var(--f-display);color:var(--olive-deep);white-space:nowrap;font-variant-numeric:tabular-nums}
+.opill{font-size:.72rem;font-weight:500;padding:.2rem .5rem;border-radius:99px;background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
+.orow.st-new{border-left-color:var(--amber)}.orow.st-new .opill{background:var(--amber-wash);color:var(--amber)}
+.orow.st-ok{border-left-color:var(--olive)}.orow.st-ok .opill{background:var(--olive-soft);color:var(--olive-deep)}
+.orow.st-ready{border-left-color:var(--sea-4)}.orow.st-ready .opill{background:var(--sea-lt);color:var(--olive-deep)}
+.orow.st-done{opacity:.72}
+.orow.st-cancel{opacity:.55}.orow.st-cancel .omid b{text-decoration:line-through}
+/* полоса открытого заказа над панелью */
+.actb{display:flex;align-items:center;gap:.5rem;padding-top:.55rem;padding-bottom:.1rem;flex-wrap:wrap}
+.actb[hidden],#toOrder[hidden]{display:none!important}
+.bbtns{display:flex;gap:.4rem;margin-left:auto}
+.bbtns .btn{margin-left:0!important;padding:.5rem .85rem}
+.actb .actw{flex:1 1 160px;min-width:0;display:grid}
+.actb #actT{font:500 .95rem var(--f-display);color:var(--olive-deep);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.actb #actS{font-size:.74rem;color:var(--ink-2)}
+.btn.sm{padding:.42rem .85rem;font-size:.86rem}
+body.oact .bar{border-top-width:2px}
+/* карточка заказа */
+.ocard{position:fixed;inset:0;z-index:46;display:flex;align-items:flex-end;justify-content:center;background:rgba(24,27,14,.45);opacity:0;visibility:hidden;transition:opacity .3s,visibility 0s linear .3s}
+.ocard.open{opacity:1;visibility:visible;transition-delay:0s}
+.ocbox{position:relative;background:var(--bg);width:min(720px,100%);max-height:94vh;max-height:94dvh;overflow-y:auto;overscroll-behavior:contain;border-radius:24px 24px 0 0;padding:0 max(16px,env(safe-area-inset-right,0px)) calc(1.6rem + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));transform:translateY(40px);transition:transform .45s cubic-bezier(.3,.7,.2,1);box-shadow:0 -10px 40px rgba(24,27,14,.25)}
+.ocard.open .ocbox{transform:none}
+body.oopen{overflow:hidden}
+.octop{position:sticky;top:0;z-index:2;background:var(--bg);display:flex;align-items:center;gap:.8rem;padding:.9rem 0 .7rem;border-bottom:1px solid var(--line);margin-bottom:.9rem}
+.octop div{flex:1;min-width:0}
+.octop h2{margin:0;font-size:1.5rem}
+.octop p{margin:0;font-size:.78rem;color:var(--ink-2)}
+.ost{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.3rem;margin-bottom:1rem}
+.ost span{font-size:.74rem;text-align:center;padding:.45rem .2rem;border-radius:10px;background:var(--surface-2);color:var(--ink-2);border:1px solid transparent}
+.ost span.past{background:var(--olive-wash);color:var(--olive-deep)}
+.ost span.cur{background:var(--olive);color:var(--bg);font-weight:500}
+.ost.cancel span{opacity:.5}
+.ocancel{margin:-.4rem 0 1rem;font-weight:500;color:var(--amber)}
+.ogrp{margin-bottom:1.15rem}
+.ogrp h3{margin:0 0 .55rem;font:500 1.05rem var(--f-display);color:var(--olive-deep)}
+.ogh{display:flex;align-items:baseline;justify-content:space-between;gap:.6rem;flex-wrap:wrap}
+.ofields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem}
+.ofl{display:grid;gap:.25rem;font-size:.8rem;color:var(--ink-2);min-width:0}
+.ofl.wide{grid-column:1/-1}
+.ofl input,.ofl textarea{width:100%;min-width:0;box-sizing:border-box;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:.6rem .7rem;font:inherit;font-size:1rem;color:var(--ink);transition:border-color .2s,box-shadow .2s}
+.ofl textarea{resize:vertical;min-height:3.2rem}
+.ofl input:focus,.ofl textarea:focus{outline:none;border-color:var(--olive);box-shadow:0 0 0 3px var(--olive-soft)}
+.ofl input:disabled,.ofl textarea:disabled{opacity:1;color:var(--ink);background:var(--surface-2)}
+.oitems{list-style:none;margin:0 0 .6rem;padding:0;display:grid;gap:.35rem}
+.oitems li{display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:.15rem .6rem;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:.4rem .6rem}
+.oia{grid-row:span 2;width:38px;height:30px}.oia svg{width:100%;height:100%;display:block}
+.oin{font-size:.88rem;min-width:0}
+.oiq{grid-column:2;font-size:.76rem;color:var(--ink-2)}
+.oitems b{grid-column:3;grid-row:1/span 2;font:500 .95rem var(--f-display);color:var(--olive-deep);white-space:nowrap}
+.osmb{margin-top:.2rem}
+.otot{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:.8rem .9rem}
+.oecon{margin-top:.6rem;border-top:1px dashed var(--line);padding-top:.5rem}
+.oecon summary{cursor:pointer;font-size:.84rem;color:var(--ink-2)}
+.oplan{list-style:none;margin:.4rem 0 0;padding:0;display:grid;gap:.35rem}
+.oplan li{display:flex;justify-content:space-between;gap:.8rem;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:.5rem .7rem;font-size:.88rem}
+.oplan li span{color:var(--amber);font-weight:500;text-align:right}
+.oacts{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.4rem}
+.oacts .btn{flex:1 1 auto}
+.oacts.sec{margin-top:1rem;justify-content:space-between;gap:.4rem 1rem}
+.lnk{border:0;background:none;padding:.3rem 0;font:inherit;font-size:.84rem;color:var(--ink-2);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.lnk.del{color:var(--amber)}
+.obk{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.4rem 1rem;margin-top:.7rem}
+.obk label{cursor:pointer}
+.lnk.arm{color:var(--amber);font-weight:500;text-decoration:none}
+.ctoast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translate(-50%,-12px);z-index:60;background:var(--olive-deep);color:var(--bg);padding:.65rem 1rem;border-radius:14px;font-size:.88rem;max-width:min(92vw,420px);text-align:center;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;box-shadow:0 10px 30px rgba(24,27,14,.3)}
+.ctoast.on{opacity:1;transform:translate(-50%,0)}
+.saddr{margin:.2rem 0 .8rem;font-size:.86rem;color:var(--paper-ink2,var(--ink-2))}
+/* режим повара: только просмотр */
+body.ro #prices,body.ro .econ,body.ro .cset,body.ro #oNew,body.ro #toOrder,body.ro #toCalc,body.ro #tabGuest{display:none!important}
+@media (max-width:520px){.ofields{grid-template-columns:1fr 1fr}.oacts .btn{flex:1 1 100%}}
+</style>
+
+<header class="hero">
+  <svg class="branch" viewBox="0 0 460 240" aria-hidden="true">
+    <defs>
+      <path id="lf" d="M0 0C10-13 30-15 46 0C30 15 10 13 0 0Z"/>
+      <radialGradient id="sg"><stop offset="0" style="stop-color:var(--sun-glow);stop-opacity:.95"/><stop offset="1" style="stop-color:var(--sun-glow);stop-opacity:0"/></radialGradient>
+    </defs>
+    <circle class="halo" cx="338" cy="86" r="80" fill="url(#sg)"/>
+    <g class="rays"><line class="ray" x1="380.0" y1="86.0" x2="404.0" y2="86.0"/><line class="ray" x1="376.8" y1="102.1" x2="389.7" y2="107.4"/><line class="ray" x1="367.7" y1="115.7" x2="384.7" y2="132.7"/><line class="ray" x1="354.1" y1="124.8" x2="359.4" y2="137.7"/><line class="ray" x1="338.0" y1="128.0" x2="338.0" y2="152.0"/><line class="ray" x1="321.9" y1="124.8" x2="316.6" y2="137.7"/><line class="ray" x1="308.3" y1="115.7" x2="291.3" y2="132.7"/><line class="ray" x1="299.2" y1="102.1" x2="286.3" y2="107.4"/><line class="ray" x1="296.0" y1="86.0" x2="272.0" y2="86.0"/><line class="ray" x1="299.2" y1="69.9" x2="286.3" y2="64.6"/><line class="ray" x1="308.3" y1="56.3" x2="291.3" y2="39.3"/><line class="ray" x1="321.9" y1="47.2" x2="316.6" y2="34.3"/><line class="ray" x1="338.0" y1="44.0" x2="338.0" y2="20.0"/><line class="ray" x1="354.1" y1="47.2" x2="359.4" y2="34.3"/><line class="ray" x1="367.7" y1="56.3" x2="384.7" y2="39.3"/><line class="ray" x1="376.8" y1="69.9" x2="389.7" y2="64.6"/></g>
+    <circle class="c-sun" cx="338" cy="86" r="31"/>
+    <circle class="sunhi" cx="331" cy="78" r="17"/>
+    <path class="st" d="M452 6C380 20 330 70 262 104S110 150 20 232"/>
+    <g class="lf">
+      <use href="#lf" transform="translate(402 24) rotate(-38) scale(.9)"/>
+      <use href="#lf" transform="translate(402 24) rotate(60) scale(.8)"/>
+      <use href="#lf" transform="translate(346 52) rotate(-24)"/>
+      <use href="#lf" transform="translate(346 52) rotate(88) scale(.9)"/>
+      <use href="#lf" transform="translate(292 90) rotate(-18) scale(1.05)"/>
+      <use href="#lf" transform="translate(292 90) rotate(100)"/>
+      <use href="#lf" transform="translate(226 118) rotate(-10) scale(1.1)"/>
+      <use href="#lf" transform="translate(226 118) rotate(112) scale(.95)"/>
+      <use href="#lf" transform="translate(160 146) rotate(2) scale(1.1)"/>
+      <use href="#lf" transform="translate(160 146) rotate(124)"/>
+      <use href="#lf" transform="translate(92 186) rotate(18)"/>
+      <use href="#lf" transform="translate(92 186) rotate(134) scale(.9)"/>
+    </g>
+    <g class="ol">
+      <ellipse cx="320" cy="104" rx="7" ry="10" transform="rotate(-20 320 104)"/>
+      <ellipse cx="252" cy="136" rx="7" ry="10" transform="rotate(-14 252 136)"/>
+      <ellipse cx="190" cy="168" rx="6" ry="9" transform="rotate(-6 190 168)"/>
+    </g>
+  </svg>
+  <div class="in">
+    <p class="kick"><svg class="hat" viewBox="0 0 32 32" aria-hidden="true"><path d="M9 21c-3.3 0-6-2.7-6-6s2.7-6 6-6c.6 0 1.2.1 1.8.3C12 6.2 13.9 4.5 16 4.5s4 1.7 5.2 4.8c.6-.2 1.2-.3 1.8-.3 3.3 0 6 2.7 6 6s-2.7 6-6 6v5.5H9z" fill="currentColor"/><rect x="9" y="23" width="14" height="2.2" rx="1" style="fill:var(--bg)" opacity=".55"/></svg>Закуски на выезд <span class="ver">версия 1.0</span></p>
+    <h1>Chefs 01</h1>
+    <p class="lead" id="lead"></p>
+  </div>
+  <div class="scene" aria-hidden="true">
+    <svg class="mtn" viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <defs><linearGradient id="haze" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--sea-lt);stop-opacity:0"/><stop offset="1" style="stop-color:var(--sea-lt);stop-opacity:.8"/></linearGradient></defs>
+      <path class="c-mtf" d="M0 120V92L90 74L170 88L280 46L360 84L450 62L540 98L640 52L740 92L830 64L930 100L1030 44L1120 82L1200 66V120Z"/>
+      <path class="c-mtn" d="M0 120V106L120 90L210 104L340 76L440 106L580 84L700 110L820 80L950 108L1070 84L1200 102V120Z"/>
+      <rect y="70" width="1200" height="50" fill="url(#haze)"/>
+    </svg>
+    <svg class="sea" viewBox="0 0 1200 100" preserveAspectRatio="none">
+      <defs><linearGradient id="hz" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--sea-lt);stop-opacity:.95"/><stop offset="1" style="stop-color:var(--sea-lt);stop-opacity:0"/></linearGradient></defs>
+      <rect class="c-sea" width="1200" height="100"/>
+      <rect width="1200" height="38" fill="url(#hz)"/>
+      <g class="wl" style="animation-duration:19s"><path class="c-s2" style="opacity:.8" d="M-300 24 q75 -4 150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 V100 H-300 Z"/></g>
+      <g class="wr" style="animation-duration:15s"><path class="c-s3" style="opacity:.75" d="M-300 48 q75 -6 150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 V100 H-300 Z"/><path class="foam" d="M-300 48 q75 -6 150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0"/></g>
+      <g class="wl" style="animation-duration:12s"><path class="c-s4" style="opacity:.7" d="M-300 72 q75 -7 150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 V100 H-300 Z"/><path class="foam" style="animation-delay:-3s" d="M-300 72 q75 -7 150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0"/></g>
+    </svg>
+    <svg class="castle" viewBox="0 0 300 190">
+      <path class="c-cliff" d="M30 190V150C32 132 44 120 58 112C64 109 70 108 78 108H204C222 110 234 124 246 142C254 154 266 166 280 172V190Z"/>
+      <path class="c-cliffd" d="M204 108C222 110 234 124 246 142C254 154 266 166 280 172V190H196L214 150Z"/>
+      <path class="c-cliffd" d="M78 108L96 132L84 190H30V150C32 132 44 120 58 112C64 109 70 108 78 108Z" style="opacity:.3"/>
+      <path class="cliffl" d="M54 118C64 111 72 109 82 109H200C212 110 220 114 228 120"/>
+      <g transform="translate(0 12)">
+        <g class="c-castle">
+          <rect x="56" y="74" width="154" height="22"/>
+          <rect x="98" y="40" width="50" height="56"/>
+          <rect x="98" y="33" width="8" height="7"/><rect x="112" y="33" width="8" height="7"/><rect x="126" y="33" width="8" height="7"/><rect x="140" y="33" width="8" height="7"/>
+          <rect x="60" y="44" width="26" height="52"/>
+          <rect x="158" y="54" width="26" height="42"/>
+          <rect x="158" y="48" width="6" height="6"/><rect x="167" y="48" width="6" height="6"/><rect x="176" y="48" width="6" height="6"/>
+        </g>
+        <polygon class="c-dk" points="56,44 73,16 90,44"/>
+        <line class="pole" x1="73" y1="16" x2="73" y2="2"/>
+        <polygon class="c-flag flag" points="73,2 88,6 73,10"/>
+        <path class="c-dk" d="M112 96V82a10 10 0 0 1 20 0V96Z"/>
+        <g class="c-win">
+          <path d="M108 66V58a4 4 0 0 1 8 0V66Z"/>
+          <path d="M130 66V58a4 4 0 0 1 8 0V66Z"/>
+          <path d="M69 62V55a4 4 0 0 1 8 0V62Z"/>
+          <path d="M167 72V66a3.5 3.5 0 0 1 7 0V72Z"/>
+        </g>
+      </g>
+      <ellipse class="foamd" cx="40" cy="176" rx="12" ry="2.4"/>
+      <ellipse class="foamd" cx="96" cy="180" rx="10" ry="2.2"/>
+      <ellipse class="foamd" cx="262" cy="172" rx="11" ry="2.3"/>
+      <g transform="translate(126 28) scale(.9)">
+        <g class="bird c-bird">
+          <ellipse cx="0" cy="2" rx="4.2" ry="3"/>
+          <circle cx="4.8" cy="0.6" r="2.1"/>
+          <polygon points="6.6,0.2 9.4,1.2 6.6,1.9"/>
+          <polygon points="-3.5,2 -9,5 -3.5,4.5"/>
+          <path class="wingL" d="M0 0C-6-10-16-12-26-4C-18-5-9-3 0 3Z"/>
+          <path class="wingR" d="M0 0C6-10 16-12 26-4C18-5 9-3 0 3Z"/>
+        </g>
+      </g>
+    </svg>
+    <svg class="sea-front" viewBox="0 0 1200 52" preserveAspectRatio="none">
+      <g class="wr" style="animation-duration:13s"><path class="c-s5" d="M-300 15 q75 -7 150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 V52 H-300 Z"/><path class="foam" style="animation-delay:-2s" d="M-300 15 q75 -7 150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0"/></g>
+      <g class="wl" style="animation-duration:10s"><path class="c-bg" d="M-300 34 q75 -6 150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 t150 0 V52 H-300 Z"/></g>
+    </svg>
+  </div>
+</header>
+
+<main class="in">
+  <section id="orders" aria-labelledby="ordersH">
+    <div class="oh"><h2 id="ordersH">Заказы</h2><button class="btn" id="oNew" type="button">+ Новый заказ</button></div>
+    <div class="chips" id="oChips" role="group" aria-label="Статус заказов"></div>
+    <div class="olist" id="oList"></div>
+    <div class="obk"><button class="lnk" id="oExp" type="button">Сохранить копию заказов</button><label class="lnk">Загрузить копию<input type="file" id="oImp" accept="application/json,.json" hidden></label></div>
+  </section>
+
+  <section id="menu">
+    <h2>Меню закусок</h2>
+    <p class="sub">Нажми на закуску — откроется состав, цена и шаги для повара.</p>
+    <div class="controls">
+      <input class="search" id="search" type="search" placeholder="Найти закуску или продукт" aria-label="Поиск по закускам и продуктам" autocomplete="off">
+      <div class="chips" id="chips" role="group" aria-label="Группы закусок"></div>
+      <div class="vrow"><div class="views" role="group" aria-label="Вид меню"><button type="button" data-v="shelf" aria-pressed="true">Полки</button><button type="button" data-v="grid" aria-pressed="false">Плитка</button><button type="button" data-v="table" aria-pressed="false">Таблица</button></div><button class="ordf" id="ordF" type="button" aria-pressed="false">В заказе <span id="ordN">0</span></button></div>
+    </div>
+    <div class="shelves" id="shelves"></div>
+    <div class="tgrid" id="tgrid"></div>
+    <table class="dishes">
+      <thead><tr><th scope="col">Закуска</th><th scope="col">Вес, г</th><th scope="col">Себестоимость, ₽</th><th scope="col">За 10 шт, ₽</th><th scope="col">В заказ, шт</th></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </section>
+
+  <section id="cook">
+    <h2>Повару</h2>
+    <p class="sub">Правила сборки по группам, проверка перед выездом и десерты.</p>
+    <div class="cook-g" id="rules"></div>
+    <div class="card quiz" id="quiz"></div>
+    <a class="card dessert" href="https://claude.ai/artifact/RAoFEMHiaQ8P31ZPVBW17b" target="_blank" rel="noopener"><svg class="pop" viewBox="0 0 44 60" aria-hidden="true"><rect x="19.5" y="2" width="5" height="22" rx="2.5" style="fill:#D3B07A"/><polygon points="8,20 36,20 22,58" style="fill:#A8335B;stroke:#A8335B" stroke-width="5" stroke-linejoin="round"/><path d="M13 30L31 26M15 38L29 34M17 46L27 42" style="stroke:#FFF8E7" stroke-width="1.6" stroke-linecap="round"/><circle cx="17" cy="25" r="1.6" style="fill:#EE92AE"/><circle cx="25" cy="27" r="1.4" style="fill:#EE92AE"/><circle cx="21" cy="23" r="1.2" style="fill:#6E1634"/></svg><div><b>Десерты: чизкейки на палочке</b><span>Отдельная ТТК на 12 вкусов: основа, глазурь, рисунки и заготовка на заказ</span></div><span class="arr" aria-hidden="true">→</span></a>
+  </section>
+
+  <section id="shop">
+    <h2>Закупка под заказ</h2>
+    <p class="sub">Считаю по упаковкам, как продают в магазине: остатки остаются у тебя.</p>
+    <div class="card shop" id="shopCard"></div>
+  </section>
+
+  <section id="prices">
+   <details class="fold" id="pricesFold">
+    <summary><span><h2>Продукты и цены</h2><span class="fsub" id="pfN">цены упаковок, можно поправить</span></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+    <p class="sub">Поправь цену упаковки — себестоимость и закупка пересчитаются сразу. Изменённые цены подсвечены и сохраняются в приложении.</p>
+    <ul class="legend">
+      <li><span class="tag vv">ВкусВилл</span> цена взята с сайта магазина 28.10.2026</li>
+      <li><span class="tag est">Оценка</span> ориентир, проверьте в Пятёрочке или Перекрёстке</li>
+    </ul>
+    <div class="card prices">
+      <div class="tbl-wrap"><table><thead><tr><th scope="col">Продукт</th><th scope="col">Упаковка</th><th scope="col">Цена, ₽</th><th scope="col">За кг или шт, ₽</th><th scope="col">Источник</th></tr></thead><tbody id="ptbody"></tbody></table></div>
+      <div class="btns"><button class="btn ghost" id="resetPrices" type="button">Вернуть исходные цены</button></div>
+    </div>
+   </details>
+  </section>
+
+  <section id="notes">
+   <details class="fold">
+    <summary><span><h2>Как считаются цены</h2><span class="fsub">вес, себестоимость, наценка и что не вошло</span></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+    <ul class="note-list">
+      <li>Правила сборки — стартовые ориентиры, а не нормы СанПиН. Сроки хранения проверь и закрепи на своих заказах.</li>
+      <li>Цены ВкусВилла взяты с сайта 28 октября 2026 года. Сайты Пятёрочки и Перекрёстка получить не удалось, поэтому остальные позиции помечены «Оценка». ВкусВилл часто дороже масс-маркета, так что для хлеба, колбас, сыров и овощей в Пятёрочке или Перекрёстке итог может выйти ниже.</li>
+      <li>Вес считал по фото, это нетто готового изделия без шпажки и стаканчика. В закупке добавлены потери на чистку и обжарку (например, у креветок и авокадо).</li>
+      <li>Себестоимость включает продукты и расходники (шпажки, стаканчики). Работа повара, аренда посуды, гастробоксы и потери при перевозке сюда не входят.</li>
+      <li>Не вошло: жёлтые розетки в мини-тарталетках, начинка по фото не читается. Позиции с пометкой «уточнить» считаны по виду, их состав стоит сверить с поваром.</li>
+      <li>Chefs 01: в карточке каждой закуски вкладка «Повару» собирает шаги сборки из граммовки, а правила «заранее / на месте / хранение» заданы по группам. Это стартовые правила: поправьте их после первых выездов.</li>
+      <li>Цена для гостя считается так: себестоимость по граммам × наценка (по умолчанию ×3,5), с округлением до 5 ₽. Отдельную наценку можно задать для позиций с пометкой «Премиум». Смена повара в цену не заложена: в «Расчёте» она вычитается отдельной строкой и в лист гостя не попадает.</li>
+    </ul>
+   </details>
+  </section>
+</main>
+
+<div class="bar" id="bar">
+  <div class="in actb" id="actB" hidden><div class="actw"><span id="actT"></span><span id="actS"></span></div><button class="btn ghost sm" id="actCard" type="button">Карточка</button><button class="btn sm" id="actDone" type="button">Готово</button></div>
+  <div class="in barin">
+    <label for="guests">Гостей <input class="g" id="guests" type="number" min="1" inputmode="numeric"></label>
+    <div class="bs"><b id="bPcs">0 шт</b><span id="bGuest">Добавь закуски кнопкой +</span></div>
+    <div class="bs"><b id="bSum">0 ₽</b><span>закупка по упаковкам</span></div>
+    <div class="bbtns"><button class="btn ghost" id="toCalc" type="button">Расчёт</button><button class="btn" id="toOrder" type="button">Оформить</button></div>
+  </div>
+</div>
+
+<button class="navtab" id="navTab" type="button" aria-expanded="false" aria-controls="drawer">Навигация</button>
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-labelledby="dtitle" inert>
+  <div class="dh"><h2 id="dtitle">Навигация</h2><button class="x" id="dClose" type="button" aria-label="Закрыть шторку">&times;</button></div>
+  <div class="db">
+    <input class="dsearch" id="dsearch" type="search" placeholder="Найти в списке" aria-label="Найти закуску в списке" autocomplete="off">
+    <h3>Разделы</h3>
+    <nav class="secs" aria-label="Разделы страницы">
+      <button type="button" data-go="orders">Заказы</button>
+      <button type="button" data-go="menu">Меню закусок</button>
+      <button type="button" data-go="cook">Повару и проверка</button>
+      <button type="button" data-calc>Расчёт для гостя и повара</button>
+      <button type="button" data-go="shop">Закупка под заказ</button>
+      <button type="button" data-go="prices">Продукты и цены</button>
+      <button type="button" data-go="notes">Как считаются цены</button>
+    </nav>
+    <h3>Группы</h3>
+    <div class="dgroups" id="dGroups"></div>
+    <h3>Перейти к букве</h3>
+    <div class="dletters" id="dLetters"></div>
+    <h3>Все закуски</h3>
+    <ul class="dlist" id="dList"></ul>
+  </div>
+  <div class="df"><div class="bs"><b id="dPcs">0 шт</b><span>в заказе</span></div><div class="bs"><b id="dSum">0 ₽</b><span>закупка по упаковкам</span></div></div>
+</aside>
+
+<nav class="az" id="az" aria-label="Шкала по алфавиту"></nav>
+<div class="azb" id="azb" aria-hidden="true"></div>
+<div class="dsheet" id="dsheet" role="dialog" aria-modal="true" aria-labelledby="dsT" inert>
+  <div class="dsbox" id="dsBox"><div class="dsgrab" aria-hidden="true"></div><button class="x" id="dsClose" type="button" aria-label="Закрыть карточку">&times;</button><div id="dsBody"></div></div>
+</div>
+<div class="calc" id="calc" role="dialog" aria-modal="true" aria-labelledby="ctitle" inert>
+  <div class="ctop"><div class="in ctopin">
+    <h2 id="ctitle">Расчёт</h2>
+    <div class="ctabs" role="tablist" aria-label="Листы">
+      <button role="tab" type="button" id="tabGuest" data-sheet="guest" aria-selected="true" aria-controls="sheetGuest">Гостю</button>
+      <button role="tab" type="button" id="tabCook" data-sheet="cook" aria-selected="false" aria-controls="sheetCook">Повару</button>
+    </div>
+    <button class="x" id="cClose" type="button" aria-label="Закрыть расчёт">&times;</button>
+  </div></div>
+  <div class="in cgrid">
+    <div class="cside no-print">
+      <div class="card cset">
+        <label class="fld" for="mk"><span>Наценка к себестоимости</span><span class="iw">×<input id="mk" type="text" inputmode="decimal" autocomplete="off"></span></label>
+        <label class="fld" for="mkp"><span>Наценка на премиум</span><span class="iw">×<input id="mkp" type="text" inputmode="decimal" placeholder="как у всех" autocomplete="off"></span></label>
+        <label class="fld" for="cookPay"><span>Смена повара, ₽</span><span class="iw"><input id="cookPay" type="text" inputmode="numeric" autocomplete="off"></span></label>
+        <label class="fld wide" for="evName"><span>Мероприятие или имя гостя</span><input id="evName" type="text" placeholder="Необязательно" maxlength="80" autocomplete="off"></label>
+        <p class="hint">Цена за штуку округляется до 5 ₽. Наценка и ставка повара сохраняются в приложении.</p>
+      </div>
+      <div class="card econ"><h3>Экономика заказа</h3><p class="hint">Видите только вы, в листы не попадает.</p><div id="econ"></div></div>
+      <div class="cact"><button class="btn" id="cSave" type="button">Поделиться листом</button><button class="btn ghost" id="cCopy" type="button">Скопировать текстом</button><p class="hint" id="cMsg" role="status"></p></div>
+    </div>
+    <div class="cmain" id="sheetBox"></div>
+  </div>
+</div>
+
+<div class="ocard" id="ocard" role="dialog" aria-modal="true" aria-labelledby="ocT" inert>
+  <div class="ocbox" id="ocBox"><div class="octop"><div><h2 id="ocT">Заказ</h2><p id="ocS"></p></div><button class="x" id="ocClose" type="button" aria-label="Закрыть заказ">&times;</button></div><div id="ocBody"></div></div>
+</div>
+<script>
+const I=(n,u,pack,price,src,shop,o)=>Object.assign({n,u,pack,price,src,shop:shop||'',y:1,w:0,pk:false},o||{});
+const ING={
+ bag:I('Багет пшеничный','г',270,112,'vv','Багет пшеничный, Пекарня, 270 г'),
+ toast:I('Хлеб для тостов зерновой','г',250,102,'vv','«Для тостов» зерновое, нарезка, 250 г'),
+ rye:I('Хлеб бородинский, нарезка','г',270,94,'vv','Бородинский бездрожжевой, нарезка, 270 г'),
+ shellL:I('Тарталетка 6 см','шт',10,130,'est','Упаковка 10 шт, средняя полка',{w:10}),
+ shellMini:I('Тарталетка мини 3,5 см','шт',12,95,'est','Упаковка 12 шт, средняя полка',{w:6}),
+ croissant:I('Круассан','шт',1,55,'est','Круассан ≈60 г, за штуку',{w:60}),
+ cream:I('Сыр творожный сливочный','г',150,159,'vv','Almette Лёгкий 53 %, 150 г'),
+ mozz:I('Моцарелла мини','г',125,186,'vv','Моцарелла мини, 125 г'),
+ burrata:I('Буррата','г',100,256,'vv','Буррата, 100 г'),
+ maasdam:I('Сыр твёрдый (маасдам, чеддер)','г',200,300,'vv','Маасдам, 200 г'),
+ dorblu:I('Сыр с голубой плесенью (дорблю)','г',100,220,'est','Ориентир за 100 г'),
+ salami:I('Салями сыровяленая, нарезка','г',100,252,'vv','Колбаса «Итальянская» сыровяленая, нарезка, 100 г'),
+ ham:I('Ветчина куриная, нарезка','г',150,248,'vv','Ветчина из куриной грудки «Лёгкая классика», 150 г'),
+ bacon:I('Бекон сырокопчёный, нарезка','г',150,288,'vv','Бекон сырокопчёный, нарезка, 150 г'),
+ roast:I('Ростбиф говяжий запечённый','г',100,240,'est','Ориентир за 100 г (на сайте ВкусВилла не найден)'),
+ shrimp:I('Креветки королевские очищенные','г',400,1125,'vv','«Королевские» очищ. 21/25 в/м, 400 г',{y:0.85}),
+ salmonS:I('Сёмга слабосолёная, ломтики','г',100,409,'vv','Сёмга слабосолёная ломтики на развес, 4 090 ₽/кг'),
+ salmonF:I('Сёмга охлаждённая (для тартара)','г',350,1200,'vv','Семга филе-кусок на коже охл., 350 г',{y:0.85}),
+ caviarR:I('Икра красная лососёвая','г',125,1950,'vv','Икра горбуши лососевая ж/б, 125 г'),
+ masago:I('Икра масаго (жёлтая)','г',100,200,'est','Ориентир за 100 г'),
+ herring:I('Сельдь малосолёная, филе','г',200,185,'vv','Сельдь малосоленая филе, 200 г'),
+ crab:I('Крабовые палочки','г',200,95,'est','Упаковка 200 г, средняя полка'),
+ chicken:I('Филе цыплёнка кубиком','г',450,380,'vv','Филе цыплёнка бройлера кубиком, 450 г',{y:0.78}),
+ quail:I('Яйцо перепелиное','шт',20,184,'vv','Яйцо перепелиное, 20 шт',{w:10}),
+ egg:I('Яйцо куриное','г',550,120,'est','Десяток С1 ≈ 550 г'),
+ cherry:I('Томаты черри','г',250,230,'vv','Томаты черри красные, 250 г',{y:0.97}),
+ cherryVine:I('Томаты черри на ветке','г',250,275,'vv','Томаты черри красные на ветке, 250 г'),
+ avocado:I('Авокадо','г',150,195,'vv','Авокадо Хасс, ≈150 г за штуку',{y:0.68}),
+ cucumber:I('Огурцы свежие','г',500,190,'vv','Огурцы Луховицкие, 500 г',{y:0.95}),
+ gherkin:I('Огурцы маринованные (корнишоны)','г',350,216,'vv','Огурцы маринованные для бутербродов, 350 г (ближайшая позиция)'),
+ olG:I('Оливки зелёные без косточки','г',280,247,'vv','Оливки зелёные без косточки, ж/б, 280 г',{y:0.6}),
+ olB:I('Маслины без косточки','г',280,228,'vv','Маслины без косточки, ж/б, 280 г',{y:0.6}),
+ beet:I('Свёкла отварная','г',500,146,'vv','Свёкла отварная, 500 г'),
+ potato:I('Картофель','г',1000,135,'vv','Картофель бэби, 135 ₽/кг',{y:0.8}),
+ carrot:I('Морковь','г',1000,60,'est','Ориентир за 1 кг',{y:0.85}),
+ corn:I('Кукуруза консервированная','г',340,146,'vv','Кукуруза сахарная в зёрнах, 340 г',{y:0.82}),
+ peas:I('Горошек зелёный консервированный','г',400,146,'vv','Горошек зелёный консервированный, 400 г',{y:0.62}),
+ mayo:I('Майонез «Провансаль»','г',200,102,'vv','Майонез Провансаль 67 %, 220 мл (≈200 г)'),
+ sauceSp:I('Соус острый (майонез и шрирача)','г',200,90,'est','Самодельный, ориентир'),
+ sauceCh:I('Соус сладкий чили','г',250,140,'est','Бутылка 250 г, средняя полка'),
+ glaze:I('Бальзамический крем или терияки','г',250,225,'est','Бутылка 250 г, средняя полка'),
+ soy:I('Соевый соус','г',250,100,'est','Бутылка 250 г, средняя полка'),
+ mustard:I('Горчица зернистая','г',175,105,'est','Банка 175 г, средняя полка'),
+ friedOn:I('Лук жареный хрустящий','г',100,60,'est','Упаковка 100 г, ориентир'),
+ redOn:I('Лук красный','г',1000,120,'est','Ориентир за 1 кг',{y:0.85}),
+ lettuce:I('Салат листовой','г',100,80,'est','Пучок 100 г, ориентир',{y:0.9}),
+ micro:I('Микрозелень, красный щавель','г',30,120,'est','Лоток 30 г, ориентир'),
+ lemon:I('Лимон','г',1000,250,'est','Ориентир за 1 кг',{y:0.55}),
+ apple:I('Яблоко','г',1000,220,'est','Ориентир за 1 кг',{y:0.85}),
+ grapeW:I('Виноград белый без косточек','г',500,310,'vv','Виноград белый б/к, 500 г'),
+ grapeR:I('Виноград красный без косточек','г',500,433,'vv','Виноград Crimson б/к, 500 г'),
+ pine:I('Ананас свежий','г',1000,320,'vv','Ананас спелый, 320 ₽/кг',{y:0.5}),
+ straw:I('Клубника','г',1000,1000,'est','Ориентир за 1 кг, октябрь'),
+ fruitMix:I('Фрукты для нарезки','г',1000,380,'est','Апельсин, яблоко, ананас, киви: средняя цена за 1 кг',{y:0.8}),
+ tvorog:I('Творог 5 %','г',500,225,'est','Пачка 500 г, ориентир'),
+ flour:I('Мука пшеничная','г',1000,70,'est','Ориентир за 1 кг'),
+ sugar:I('Сахар','г',1000,85,'est','Ориентир за 1 кг'),
+ oil:I('Масло подсолнечное','г',900,170,'est','Бутылка 1 л ≈ 900 г'),
+ sour:I('Сметана 20 %','г',400,132,'est','Стаканчик 400 г, ориентир'),
+ pick:I('Шпажка или пика','шт',100,120,'est','Упаковка 100 шт, расходник',{pk:true}),
+ cup:I('Стаканчик с ложкой','шт',50,450,'est','Упаковка 50 шт, расходник',{pk:true})
+};
+const TYPES=['Брускетты','Канапе и шпажки','Тарталетки','Салаты в стаканчиках','Бранч-бокс'];
+const D=(id,n,t,p,d,c,chk)=>({id,n,t,p,d,c,chk:chk||''});
+const DISHES=[
+ D('b-caviar','Брускетта «Красная икра и перепелиное яйцо»','Брускетты',[12],'Багет, сливочный сыр, красная икра, половинки перепелиного яйца, микрозелень',[['bag',25],['cream',18],['caviarR',9],['quail',1],['micro',0.5]]),
+ D('b-shrimp-spicy','Брускетта «Креветка в пряном соусе»','Брускетты',[2,3],'Багет, сливочный сыр, обжаренные креветки, острый соус, микрозелень',[['bag',25],['cream',20],['shrimp',30],['sauceSp',8],['micro',0.5]]),
+ D('b-shrimp-lemon','Брускетта «Креветка с лимоном»','Брускетты',[12],'Багет с кунжутом, сливочный сыр, креветки, лимон, микрозелень',[['bag',25],['cream',20],['shrimp',25],['lemon',4],['micro',0.5]]),
+ D('b-salmon','Брускетта «Лосось и сливочный сыр»','Брускетты',[3,16],'Багет, сливочный сыр, слабосолёный лосось, сладкий чили, зелёная оливка',[['bag',25],['cream',18],['salmonS',25],['sauceCh',8],['olG',4],['micro',0.5]]),
+ D('b-roast','Брускетта «Ростбиф и жареный лук»','Брускетты',[1,16],'Багет, сливочный сыр, ростбиф, хрустящий лук, соус, красный щавель',[['bag',25],['cream',18],['roast',28],['friedOn',3],['glaze',6],['micro',1]]),
+ D('b-avocado','Брускетта «Томат и авокадо»','Брускетты',[12],'Багет, сливочный сыр, тартар из томата и авокадо, микрозелень',[['bag',25],['cream',12],['avocado',28],['cherry',28],['lemon',2],['micro',0.5]]),
+
+ D('k-ham-gherkin','Канапе «Ветчина и корнишон»','Канапе и шпажки',[6,9],'Ветчина, свёрнутая вокруг корнишона, капля сливочного сыра, шпажка',[['ham',18],['gherkin',12],['cream',5],['pick',1]]),
+ D('k-shrimp-pine','Канапе «Креветка на ананасе»','Канапе и шпажки',[3,16],'Обжаренная креветка на кубике ананаса, шпажка',[['shrimp',20],['pine',18],['pick',1]]),
+ D('k-salami-olive','Канапе «Салями, сливочный сыр и оливка»','Канапе и шпажки',[3],'Кусочек багета, сливочный сыр, салями, зелёная оливка',[['bag',10],['cream',10],['salami',8],['olG',4],['pick',1]]),
+ D('k-cheese-grape','Канапе «Сыр и виноград»','Канапе и шпажки',[3],'Маасдам, дорблю и виноград на шпажке',[['maasdam',12],['dorblu',6],['grapeW',18],['pick',1]]),
+ D('k-cheddar-apple','Канапе «Чеддер, дорблю и яблоко»','Канапе и шпажки',[16],'Чеддер, дорблю и шарик яблока на шпажке',[['maasdam',12],['dorblu',6],['apple',18],['pick',1]],'Светлые шарики на шпажке: яблоко, груша или дыня, по фото не различить. Посчитано как яблоко.'),
+ D('k-salami-quail','Канапе «Салями, перепелиное яйцо и огурец»','Канапе и шпажки',[9],'Салями веером, перепелиное яйцо, кружок огурца, оливка',[['salami',10],['quail',1],['cucumber',6],['olG',4],['pick',1]]),
+ D('k-bacon-rye','Канапе на ржаном «Бекон, творожный сыр и черри»','Канапе и шпажки',[6],'Бородинский хлеб, сливочный сыр, бекон, половинка черри',[['rye',14],['cream',8],['bacon',10],['cherry',6],['pick',1]]),
+ D('k-herring-rye','Канапе на ржаном «Сельдь и красный лук»','Канапе и шпажки',[6],'Бородинский хлеб, сливочный сыр, сельдь, кольцо красного лука, зелень',[['rye',14],['cream',6],['herring',16],['redOn',3],['micro',0.5],['pick',1]]),
+ D('k-gherkin-rye','Канапе на ржаном «Сливочный сыр, корнишон и горчица»','Канапе и шпажки',[6],'Бородинский хлеб, сливочный сыр, ломтик корнишона, зерно горчицы',[['rye',14],['cream',10],['gherkin',8],['mustard',2],['pick',1]],'Начинка на фото видна не полностью: сливочная основа, корнишон, горчичные зёрна.'),
+ D('k-toast','Тост-треугольник «Ветчина, сыр и черри»','Канапе и шпажки',[9],'Подсушенный тост, ветчина, сыр, сливочный сыр, половинка черри',[['toast',25],['ham',12],['maasdam',8],['cream',5],['cherry',6],['pick',1]]),
+ D('k-caprese','Шпажка «Капрезе»','Канапе и шпажки',[7],'Черри, салатный лист, моцарелла-мини',[['cherry',12],['lettuce',3],['mozz',10],['pick',1]]),
+ D('k-olive-mozz','Шпажка «Маслина и моцарелла с кунжутом»','Канапе и шпажки',[7],'Маслина и шарик моцареллы в кунжуте',[['olB',4],['mozz',10],['pick',1]]),
+ D('k-salami-tomato','Шпажка «Салями-розочка и помидор»','Канапе и шпажки',[7],'Розочка из салями, черри, салатный лист',[['salami',8],['cherry',10],['lettuce',3],['pick',1]]),
+ D('k-salami-straw','Шпажка «Салями, клубника и сыр»','Канапе и шпажки',[7],'Розочка из салями, клубника, кубик дорблю, салатный лист',[['salami',8],['straw',12],['dorblu',8],['lettuce',3],['pick',1]]),
+ D('k-pepperoni','Шпажка «Острая салями, салат и маслина»','Канапе и шпажки',[7],'Розочка из острой салями, салатный лист, маслина',[['salami',8],['lettuce',3],['olB',4],['pick',1]]),
+ D('k-ham-roll','Шпажка «Ветчина-рулет, сыр и черри»','Канапе и шпажки',[9],'Рулетик из ветчины, кубик сыра, черри, салатный лист',[['ham',15],['maasdam',12],['cherry',12],['lettuce',2],['pick',1]]),
+
+ D('t-yellow','Тарталетка «Жёлтая икра»','Тарталетки',[10],'Тарталетка, сливочный сыр, икра масаго, веточка укропа',[['shellL',1],['cream',15],['masago',8],['micro',0.5]]),
+ D('t-red-cucumber','Тарталетка «Красная икра и огурец»','Тарталетки',[10],'Тарталетка, сливочный крем, красная икра, ломтик огурца',[['shellL',1],['cream',10],['caviarR',8],['cucumber',4]]),
+ D('t-shrimp','Тарталетка «Креветка и сливочный сыр»','Тарталетки',[10],'Тарталетка, сливочный сыр, креветка, листик базилика',[['shellL',1],['cream',15],['shrimp',15],['micro',0.5]]),
+ D('t-corn-crab','Тарталетка «Кукуруза и крабовый салат»','Тарталетки',[10],'Тарталетка, крабовый салат с кукурузой и яйцом, ложечка красной икры',[['shellL',1],['crab',10],['corn',10],['egg',6],['mayo',4],['caviarR',2]],'Начинка принята как крабовый салат с кукурузой, точный рецепт уточнить у повара.'),
+ D('t-salmon-tartare','Тарталетка «Тартар из лосося и огурца»','Тарталетки',[10],'Тарталетка, кубики лосося и огурца, цедра лимона',[['shellL',1],['salmonF',15],['cucumber',8],['lemon',0.5],['soy',1]]),
+ D('tm-red','Мини-тарталетка «Красная икра»','Тарталетки',[11],'Мини-тарталетка, сливочный сыр, красная икра',[['shellMini',1],['cream',4],['caviarR',5]]),
+ D('tm-shrimp','Мини-тарталетка «Креветка»','Тарталетки',[11],'Мини-тарталетка, сливочный сыр, креветка, микрозелень',[['shellMini',1],['cream',5],['shrimp',10],['micro',0.3]]),
+ D('tm-salmon','Мини-тарталетка «Тартар из лосося»','Тарталетки',[11],'Мини-тарталетка, кубики лосося, чёрный кунжут',[['shellMini',1],['salmonF',10],['soy',0.5]]),
+ D('tm-cheese-ham','Мини-тарталетка «Сыр, ветчина и яйцо»','Тарталетки',[11],'Мини-тарталетка, салат из ветчины, сыра и яйца, листик базилика',[['shellMini',1],['ham',6],['maasdam',6],['egg',5],['mayo',3],['micro',0.3]],'Состав принят по виду: ветчина, сыр, яйцо, майонез.'),
+ D('tm-salami','Мини-тарталетка «Салями-розочка»','Тарталетки',[11],'Мини-тарталетка, сливочный сыр, розочка из салями',[['shellMini',1],['cream',5],['salami',10]]),
+
+ D('s-herring-fur','Салат «Сельдь под шубой» в стаканчике','Салаты в стаканчиках',[4,13],'Слои: свёкла, картофель, морковь, яйцо, сельдь, майонез',[['beet',30],['potato',18],['carrot',10],['egg',16],['herring',22],['mayo',16],['cup',1]]),
+ D('s-olivier','Салат «Оливье» с жёлтой икрой в стаканчике','Салаты в стаканчиках',[5,13],'Картофель, морковь, яйцо, огурец, горошек, крабовые палочки, майонез, икра масаго',[['potato',25],['carrot',10],['egg',22],['gherkin',8],['peas',10],['crab',12],['mayo',12],['masago',4],['cup',1]]),
+ D('s-chicken','Салат «Курица, кукуруза и перепелиное яйцо» в стаканчике','Салаты в стаканчиках',[14],'Курица, кукуруза, томат, огурец, перепелиное яйцо, лёгкая заправка',[['chicken',45],['corn',15],['cherry',18],['cucumber',15],['quail',1],['mayo',8],['cup',1]]),
+ D('s-salmon-tartare','Салат «Тартар из лосося с красной икрой» в стаканчике','Салаты в стаканчиках',[13],'Лосось, огурец, авокадо, красная икра, соевая заправка',[['salmonF',40],['cucumber',22],['avocado',12],['caviarR',5],['soy',4],['lemon',3],['cup',1]]),
+
+ D('r-croissant','Круассан-сэндвич с ветчиной','Бранч-бокс',[8,15],'Круассан, ветчина, салатный лист, сливочный сыр',[['croissant',1],['ham',30],['lettuce',6],['cream',12]]),
+ D('r-burrata','Буррата с чёрным перцем','Бранч-бокс',[8,15],'Шарик бурраты, молотый чёрный перец',[['burrata',30]]),
+ D('r-salmon-rose','Розочка из лосося на тосте','Бранч-бокс',[8,15],'Кусочек тоста, сливочный сыр, розочка из слабосолёного лосося',[['toast',12],['cream',6],['salmonS',16],['micro',0.3]]),
+ D('r-syrnik','Сырник со сметаной и ягодой','Бранч-бокс',[8,15],'Жареный сырник, сметана, клубника',[['tvorog',40],['egg',6],['flour',8],['sugar',3],['oil',3],['sour',15],['straw',6]]),
+ D('r-fruit','Фруктовая нарезка (порция 90 г)','Бранч-бокс',[8,15],'Апельсин, яблоко, ананас, киви',[['fruitMix',90]]),
+ D('r-grape','Виноград красный (порция 45 г)','Бранч-бокс',[8,15],'Гроздь красного винограда',[['grapeR',45]]),
+ D('r-cherry','Черри на ветке (порция 60 г)','Бранч-бокс',[8,15],'Три-четыре помидора черри на ветке',[['cherryVine',60]])
+];
+function unitPrice(id,pr){const i=ING[id];const p=pr&&pr[id]!=null?pr[id]:i.price;return p/i.pack}
+function calcDish(d,pr){let w=0,cost=0;const rows=[];for(const [id,q] of d.c){const i=ING[id];const gross=q/i.y;const c=gross*unitPrice(id,pr);const net=i.pk?0:(i.u==='шт'?q*i.w:q);w+=net;cost+=c;rows.push({id,q,gross,c,net})}return{w,cost,rows}}
+function shopList(qty,pr){const need={};let exact=0,pcs=0,wt=0;for(const d of DISHES){const k=+qty[d.id]||0;if(!k)continue;const c=calcDish(d,pr);exact+=c.cost*k;pcs+=k;wt+=c.w*k;for(const r of c.rows)need[r.id]=(need[r.id]||0)+r.gross*k}
+ const rows=Object.keys(need).map(id=>{const i=ING[id];const price=pr&&pr[id]!=null?pr[id]:i.price;const packs=Math.ceil(need[id]/i.pack-1e-9);return{id,need:need[id],packs,sum:packs*price}});
+ const total=rows.reduce((s,r)=>s+r.sum,0);return{rows,total,exact,pcs,wt}}
+
+/* премиум и цена для гостя */
+const PREM=['s-salmon-tartare','b-caviar','t-red-cucumber','b-salmon','b-shrimp-spicy','b-shrimp-lemon','b-roast','b-avocado','tm-red'];
+DISHES.forEach(d=>{d.prem=PREM.indexOf(d.id)>=0});
+function markupFor(d,m,mp){return d.prem&&mp>0?mp:m}
+function guestPrice(d,pr,m,mp){const c=calcDish(d,pr).cost;return Math.max(5,Math.round(c*markupFor(d,m,mp)/5)*5)}
+function orderCalc(qty,pr,m,mp,cook){let rev=0,pcs=0;const items=[];for(const d of DISHES){const k=+qty[d.id]||0;if(!k)continue;const p=guestPrice(d,pr,m,mp);items.push({d,k,p,sum:p*k});rev+=p*k;pcs+=k}
+ const L=shopList(qty,pr);const ck=+cook||0;return{items,rev,pcs,buy:L.total,exact:L.exact,cook:ck,left:rev-L.total-ck,L}}
+
+/* 2D-иллюстрации закусок: плоские слои, цвета из токенов --f-* */
+var artSVG=(function(){
+function G(x,y,s,r,k){return '<g transform="translate('+x+' '+y+')'+(r?' rotate('+r+')':'')+(k&&k!==1?' scale('+k+')':'')+'">'+s+'</g>'}
+function E(cx,cy,rx,ry,c){return '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" class="a-'+c+'"/>'}
+function C(cx,cy,r,c){return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" class="a-'+c+'"/>'}
+function P(d,c){return '<path d="'+d+'" class="a-'+c+'"/>'}
+function S(d,c,w,x){return '<path d="'+d+'" class="s-'+c+'" stroke-width="'+(w||1)+'"'+(x||'')+'/>'}
+function R(x,y,w,h,r,c){return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+r+'" class="a-'+c+'"/>'}
+function f1(n){return Math.round(n*10)/10}
+function dots(cx,cy,rx,ry,n,r,cls,hi){var o='';var cs=[].concat(cls);for(var k=0;k<n;k++){var a=k*2.39996,q=Math.sqrt((k+.5)/n);var x=cx+Math.cos(a)*q*rx,y=cy+Math.sin(a)*q*ry;o+=C(f1(x),f1(y),r,cs[k%cs.length]);if(hi&&k%3===0)o+=C(f1(x-r*.3),f1(y-r*.35),f1(r*.4),hi)}return o}
+function cube(t,l,r){return P('M0 -5.6L6.2 -2.6L0 .6L-6.2 -2.6Z',t)+P('M-6.2 -2.6L0 .6V6.6L-6.2 3.4Z',l)+P('M6.2 -2.6L0 .6V6.6L6.2 3.4Z',r)}
+var HI=' stroke-opacity=".6"';
+var T={
+ cherry:function(){return C(0,0,5.4,'tom')+S('M-3.1 -2.4a3.5 3.5 0 0 1 3.3 -2.1','glass',1.1,HI)+S('M0 -5.4l-1.7 -2.1M0 -5.4l1.7 -1.8','grnD',1.1)},
+ cherryHalf:function(){return E(0,0,5.4,3.9,'tom')+E(0,.3,3.1,2,'tomL')},
+ cheese:function(){return cube('chs','chsD','chsM')+C(-1,-2.8,.8,'chsD')+C(2.4,-2.2,.6,'chsD')},
+ cheddar:function(){return cube('chdT','chdL','chdR')},
+ blue:function(){return cube('blue','blueD','blueM')+S('M-2.4 -3.4l2.2 1.2M1.2 -3.9l2.4 1.1','vein',.8)+S('M-4.2 1.6l2.2 1M3.2 1.4l1.6 -.9','vein',.8)},
+ pine:function(){return cube('pine','pineD','pineM')+S('M-3.1 -3.3l3.1 1.5l3.1 -1.5','pineD',.6)},
+ moz:function(ses){var s=C(0,0,5.7,'moz')+S('M3.6 2.4a4.6 4.6 0 0 1 -5 2.7','mozD',1.1);if(ses)[[-3,-1],[2,-3],[3.2,1.6],[-1,3],[0,-.4],[-3.4,2.4],[-1.6,-3.6]].forEach(function(p){s+=E(p[0],p[1],.75,.45,'sesame')});return s},
+ salami:function(h){return C(0,0,6.2,h?'salH':'sal')+S('M-1.1 0a1.1 1.1 0 1 1 2.2 0a2.5 2.5 0 1 1 -5 0a3.9 3.9 0 1 1 7.8 0','salD',.9)+C(3.4,-3.2,.8,'fat')+C(-3.8,2.4,.7,'fat')+C(1.2,4.2,.6,'fat')+(h?C(-2,-3.6,.5,'yel')+C(3.6,2,.5,'yel'):'')},
+ salamiFan:function(){return G(-3,1,P('M-6 2a6 5.4 0 0 1 12 0Z','salD'))+G(2,0,P('M-6 2a6 5.4 0 0 1 12 0Z','sal'))+C(1,-1.4,.7,'fat')+C(4,.4,.6,'fat')},
+ lettuce:function(){return P('M-8 1C-9 -4 -4 -8 0 -6C3 -9 9 -4 8 1C9 5 3 6.5 0 5.4C-3 7.2 -9 6 -8 1Z','grn')+S('M-6.5 1.4Q0 -1.6 6.5 1.2','grnD',.8,HI)},
+ olive:function(g){return g?E(0,0,4.2,3.3,'olG')+C(1.9,0,1.3,'red'):E(0,0,4.3,3.5,'olB')+E(.4,0,1.4,1.1,'olH')},
+ str:function(){return P('M0 6.2C-7 2 -6.6 -5 -2 -5.4C-1 -5.6 1 -5.6 2 -5.4C6.6 -5 7 2 0 6.2Z','str')+[[-2,-1.6],[1.8,-2],[0,.8],[-2.6,1.8],[2.4,1.6],[0,3.6]].map(function(p){return E(p[0],p[1],.45,.65,'yel')}).join('')+P('M-3.6 -5.2L-1.2 -4.2L0 -6.4L1.2 -4.2L3.6 -5.2L2 -3.6H-2Z','grn')},
+ grape:function(c){return C(0,0,4.8,c)+S('M-2.3 -1.7a2.8 2.8 0 0 1 2.4 -1.4','glass',1,HI)},
+ apple:function(){return C(0,0,5.2,'apple')+S('M3.6 2.2a4.4 4.4 0 0 1 -4.6 2.6','creamD',1.1)+S('M-2.6 -1.8a3 3 0 0 1 2.6 -1.8','glass',1,HI)},
+ quail:function(){return E(0,0,5,3.8,'egg')+S('M-4.6 1.2a5 3.8 0 0 0 9.2 0','eggD',.8)+E(0,.3,2.3,1.8,'yel')},
+ cuc:function(){return C(0,0,5.2,'cucD')+C(0,0,4.2,'cuc')+C(0,0,2.1,'cucC')+[0,72,144,216,288].map(function(a){var r=a*Math.PI/180;return E(f1(Math.cos(r)*1.3),f1(Math.sin(r)*1.3),.45,.3,'cucD')}).join('')},
+ hamRoll:function(core){return R(-9,-4.6,16,9.2,4.6,'ham')+S('M-3 -4.4Q-1 0 -3 4.4M2 -4.4Q4 0 2 4.4','hamD',.8)+C(7,0,4.6,'hamL')+S('M7 0m-1 0a1 1 0 1 1 2 0a2.6 2.6 0 1 1 -5.2 0','hamD',.7)+(core?C(7,0,1.9,core):'')},
+ shrimp:function(){return S('M-9 3C-9 -4 0 -8 7 -3','shr',6)+S('M-9 3C-9 -4 0 -8 7 -3','shrD',6,' stroke-linecap="butt" stroke-dasharray=".6 3.4" stroke-opacity=".75"')+P('M6.6 -3.4l4 -3.2l1 4.8Z','shrD')+C(-8.6,3.4,1,'shrD')},
+ dill:function(){return S('M0 4C0 0 1 -3 2.4 -6','grnD',.9)+S('M.6 1l-3 -1.4M.6 1l3 -.8M1.2 -1.6l-3 -1.6M1.3 -1.6l3 -1M2 -4l-2.4 -1.6M2.1 -4l2.6 -.6','grn',.9)},
+ micro:function(){return S('M0 3V-1M0 3l-3 -2.4M0 3l3 -2.2','grnD',.6)+G(-3.2,-1.2,E(0,0,2.4,1.2,'grn'),-30)+G(0,-2.2,E(0,0,2.5,1.3,'grnL'),80)+G(3.2,-1,E(0,0,2.4,1.2,'grn'),25)},
+ basil:function(){return P('M0 3.4C-6 1.4 -6 -5 0 -6.4C6 -5 6 1.4 0 3.4Z','grn')+S('M0 3.4V-5','grnD',.7)},
+ sorrel:function(){return P('M0 3.4C-5 1 -5 -4.6 0 -6C5 -4.6 5 1 0 3.4Z','grn')+S('M0 3.4V-5M0 -1l-2.4 -1.6M0 -1l2.4 -1.6','red',.8)},
+ lemon:function(){return P('M-5.6 2.4a5.6 5.6 0 0 1 11.2 0Z','lemD')+P('M-4.4 2.4a4.4 4.4 0 0 1 8.8 0Z','lemL')+S('M0 2.4V-1.8M0 2.4l-3 -2.6M0 2.4l3 -2.6','lem',.7)},
+ ribbon:function(){return P('M-12 3C-10 -5 -4 -6 -1 -1S7 4 12 -4C13 2 7 8 1 6S-9 8 -12 3Z','salm')+S('M-9 1C-6 -3 -3 -2 0 1S6 2 9 -1','salmL',1.1)+S('M-8 4.4C-4 2.4 0 4.4 4 4.4','salmD',.9,HI)},
+ rose:function(){return C(0,0,6.4,'salm')+S('M-1 0a1 1 0 1 1 2 0a2.4 2.4 0 1 1 -4.8 0a3.8 3.8 0 1 1 7.6 0a5.2 5.2 0 1 1 -10.4 0','salmL',1.1)+S('M2.5 -4.5q2 1 2.6 3','salmD',.8)},
+ roast:function(){return E(0,0,9,4.8,'roastD')+E(0,0,7.4,3.5,'roast')+E(-.6,-.3,3.4,1.4,'roastL')},
+ fried:function(){return S('M-8 0q2 -3 4 0t4 0M-2 2q2 -3 4 0t4 0M2 -2q2 -3 4 0t4 0','syrD',1.2)},
+ caviar:function(){return E(0,-.6,9.4,4.4,'redD')+dots(0,-.8,8.6,3.9,26,1.5,'red','redL')},
+ masago:function(){return E(0,-.6,9.4,4.2,'yelD')+dots(0,-.8,8.8,3.8,34,1.1,'yel','egg')},
+ bacon:function(){return P('M-14 0C-10 -4 -6 3 -2 -1S6 3 10 -1S14 1 14 1V4C10 4 6 7 2 3S-6 7 -14 4Z','bacon')+S('M-12 1.4C-9 -1 -6 4 -2 1S6 4 10 1','fat',1.1)},
+ herring:function(){return P('M-14 1C-8 -4 6 -4 14 -1C12 3 6 5 0 4.4S-12 5 -14 1Z','herr')+S('M-11 1C-5 -1.6 5 -1.6 11 -.4','herrD',1.1)+S('M-9 2.6C-3 1.6 4 1.6 9 1.6','glass',.9,HI)},
+ onion:function(){return S('M-4.2 0a4.2 3.2 0 1 0 8.4 0a4.2 3.2 0 1 0 -8.4 0','onion',1.6)}
+};
+var SH=E(48,58,25,3.4,'shadow');
+function bag(cx,cy,ses,k){k=k||1;var s=E(cx,cy+3.2*k,26*k,13*k,'crustD')+E(cx,cy,26*k,13*k,'crust')+E(cx,cy,23.2*k,10.8*k,'bread');
+ if(ses)for(var i=0;i<14;i++){var a=i/14*6.283+.3;s+=E(f1(cx+Math.cos(a)*24.6*k),f1(cy+Math.sin(a)*11.9*k),.9,.5,'creamD')}
+ return s+E(cx,cy-.5*k,19*k,8.2*k,'cream')}
+function sq(cx,cy,w,h,kind,spread){var x=cx-w/2,y=cy-h/2;var rye=kind==='rye';
+ return R(x,y+4,w,h,5,rye?'ryeD':'toastD')+R(x,y,w,h,5,rye?'rye':'toast')+R(x+2.2,y+2.2,w-4.4,h-4.4,3.6,rye?'ryeL':'breadL')+(spread?R(x+4.6,y+4.4,w-9.2,h-8.8,3,'cream'):'')}
+function pickV(x,y){return S('M'+x+' '+y+'L'+(x+4)+' 12','wood',1.7)+C(x+4.4,11,2.2,'wood')}
+function brus(top,ses){return SH+bag(48,45,ses)+G(48,42,top)}
+function shell(k,top){var s=P('M-15 0C-15 9 -11 13 -9 13H9C11 13 15 9 15 0Z','shell')+S('M-9.5 3V12M-4.8 3.6V13M0 3.8V13M4.8 3.6V13M9.5 3V12','shellD',.9)+E(0,0,15,6.2,'shellD')+E(0,0,13.4,5.2,'shellL')+E(0,-.4,11.6,4.4,'cream');
+ return E(48,58,20*k,2.8*k,'shadow')+G(48,40,s+G(0,-1,top||''),0,k)}
+function skewer(items,k){var x1=20,y1=55,x2=76,y2=24,n=items.length,s=SH+S('M'+x1+' '+y1+'L'+x2+' '+y2,'wood',1.8)+C(x2+1.4,y2-.7,2.3,'wood');
+ for(var i=n-1;i>=0;i--){var t=(i+.8)/(n+.6);var it=items[i];s+=G(f1(x1+(x2-x1)*t),f1(y1+(y2-y1)*t),it[0],it[1]||0,(it[2]||1)*(k||1.55))}
+ return s}
+function cup(layers,top){var yT=14,yB=60.5,yF=24;function L(y){return 33+(y-yT)*6/46}function Rr(y){return 63-(y-yT)*6/46}
+ var tot=layers.reduce(function(a,l){return a+l[1]},0),y=yB,s=E(48,61.5,15,2.4,'shadow');
+ layers.forEach(function(l){var h=(yB-yF)*l[1]/tot,ya=y-h;s+='<path d="M'+f1(L(ya))+' '+f1(ya)+'H'+f1(Rr(ya))+'L'+f1(Rr(y))+' '+f1(y)+'H'+f1(L(y))+'Z" class="a-'+l[0]+'"/>';if(l[2])s+=l[2](L,Rr,ya,y);y=ya});
+ s+=P('M33 14L39.1 59Q39.4 61 41.6 61H54.4Q56.6 61 56.9 59L63 14Z','glassT')+S('M33 14L39.1 59Q39.4 61 41.6 61H54.4Q56.6 61 56.9 59L63 14','line',1.1)+S('M33 14H63','line',.8,' stroke-opacity=".5"')+S('M36.6 22L40.4 54','glass',1.6,' stroke-opacity=".7"');
+ s+=S('M56 20L68 7','wood',1.6)+G(69.6,5.4,E(0,0,3.4,2,'wood'),-42);
+ return s+G(48,yF,top||'')}
+function speck(cls,n,r){return function(L,Rr,ya,yb){var o='';for(var k=0;k<n;k++){var y=ya+(yb-ya)*((k*0.618)%1*.8+.1);var x0=L(y)+2,x1=Rr(y)-2;var x=x0+(x1-x0)*((k*0.381+.13)%1);o+=C(f1(x),f1(y),r,cls[k%cls.length])}return o}}
+function sqCubes(list){return list.map(function(c){return R(c[0]-1.5,c[1]-1.5,3,3,.6,c[2])}).join('')}
+
+var A={
+'b-caviar':function(){return brus(G(0,1,T.caviar())+G(-15,2,T.quail(),-12,.95)+G(15,2,T.quail(),10,.95)+G(0,-6,T.micro()))},
+'b-shrimp-spicy':function(){return brus(G(-8,1,T.shrimp(),-5,.9)+G(8,2,T.shrimp(),8,.9)+S('M-15 5q3.75 -3 7.5 0t7.5 0t7.5 0t7.5 0','sauceCh',1.4)+G(1,-6,T.micro()))},
+'b-shrimp-lemon':function(){return brus(G(-8,1,T.shrimp(),-5,.9)+G(6,2,T.shrimp(),10,.85)+G(14,-3,T.lemon(),-20,.95)+G(-1,-6,T.micro()),true)},
+'b-salmon':function(){return brus(G(-1,0,T.ribbon(),0,1.25)+C(-13,4,1.6,'sauceCh')+C(-9,6.4,1.2,'sauceCh')+C(11,5,1.6,'sauceCh')+G(12,-3,T.olive(1))+G(-4,-5,T.micro(),0,.9))},
+'b-roast':function(){return brus(G(-7,1,T.roast(),-12,1.05)+G(8,0,T.roast(),10,1.05)+S('M-14 5q3.5 -2.4 7 0t7 0t7 0t7 0','ryeD',1.5)+G(0,-3,T.fried())+G(5,-7,T.sorrel(),20))},
+'b-avocado':function(){var l=[];var cl=['avo','tom','avoD','tom','avo','avo','tomD','avo','tom','avoD','avo','tom'];for(var i=0;i<12;i++){l.push([-11+(i%6)*4.4+((i/6|0)%2)*2,-2+(i/6|0)*4.2,cl[i]])}return brus(sqCubes(l)+G(1,-6,T.micro()))},
+
+'k-ham-gherkin':function(){return SH+S('M22 52L74 26','wood',1.8)+C(75.4,25.3,2.3,'wood')+G(44,41,T.hamRoll('grnD'),-27,1.9)+C(64,31,4,'cream')+S('M61.2 29.8a2.4 2.4 0 0 1 2 -.8','glass',.8,HI)},
+'k-shrimp-pine':function(){return SH+G(48,48,T.pine(),0,1.9)+G(47,36,T.shrimp(),-8,1.1)+pickV(48,34)},
+'k-salami-olive':function(){return E(48,58,19,2.8,'shadow')+bag(48,49,false,.72)+G(48,46,T.salami(),0,1.15)+pickV(48,44)+G(50.2,27,T.olive(1),78)},
+'k-cheese-grape':function(){return skewer([[T.cheese()],[T.blue()],[T.grape('grapeG')]],1.7)},
+'k-cheddar-apple':function(){return skewer([[T.cheddar()],[T.blue()],[T.apple()]],1.7)},
+'k-salami-quail':function(){return skewer([[T.olive(1)],[T.cuc()],[T.quail(),-20],[T.salamiFan(),-20]],1.45)},
+'k-bacon-rye':function(){return sq(48,47,42,22,'rye',true)+G(48,44,T.bacon(),0,1.05)+pickV(48,42)+G(49,40,T.cherryHalf(),0,1.1)},
+'k-herring-rye':function(){return sq(48,47,42,22,'rye',true)+G(48,45,T.herring(),0,1.1)+pickV(50,42)+G(46,41,T.onion(),0,1.1)+G(56,39,T.dill(),30)},
+'k-gherkin-rye':function(){var s=sq(48,47,42,22,'rye',true)+G(48,44,T.cuc(),0,1.3);[[-12,-2],[-9,3],[11,-3],[13,2],[-4,5],[6,5],[-14,1],[9,-5]].forEach(function(p){s+=C(48+p[0],45+p[1],1,'yelD')});return s+pickV(48,40)},
+'k-toast':function(){return SH+G(48,48.5,P('M-22 11L22 11L0 -14Z','toastD'),0,1)+G(48,45,P('M-22 11L22 11L0 -14Z','toast')+P('M-17 8L17 8L0 -9Z','breadL')+P('M-14 7.4L14 7.4L0 -6Z','ham')+P('M-9 6.4L9 6.4L0 -3Z','chs'))+pickV(48,46)+C(46,44.5,2.4,'cream')+G(51,47,T.cherryHalf(),0,.9)},
+'k-caprese':function(){return skewer([[T.cherry()],[T.lettuce(),-25,.9],[T.moz()]])},
+'k-olive-mozz':function(){return skewer([[T.olive()],[T.moz(true)]],1.9)},
+'k-salami-tomato':function(){return skewer([[T.salami()],[T.cherry()],[T.lettuce(),-25,.9]])},
+'k-salami-straw':function(){return skewer([[T.salami()],[T.str()],[T.blue()],[T.lettuce(),-25,.8]],1.4)},
+'k-pepperoni':function(){return skewer([[T.salami(1)],[T.lettuce(),-25,.9],[T.olive()]])},
+'k-ham-roll':function(){return skewer([[T.hamRoll('cream'),-27,.7],[T.cheese()],[T.cherry()],[T.lettuce(),-25,.8]],1.4)},
+
+'t-yellow':function(){return shell(1.3,T.masago()+G(2,-5,T.dill(),20,.8))},
+'t-red-cucumber':function(){return shell(1.3,G(5,-4,T.cuc(),0,.7)+G(-1,0,T.caviar(),0,.85))},
+'t-shrimp':function(){return shell(1.3,G(-1,-2,T.shrimp(),-6,.85)+G(7,-5,T.basil(),35,.7))},
+'t-corn-crab':function(){var s=E(0,-1.4,10,4,'mayo')+dots(0,-1.4,9,3.6,14,1.1,['corn','crab','corn','egg']);return shell(1.3,s+G(4,-4,dots(0,0,2.8,1.4,7,1,'red','redL')))},
+'t-salmon-tartare':function(){var l=[];var cl=['salm','cuc','salmD','salm','cuc','salm','salmL','cuc','salm','salm'];for(var i=0;i<10;i++)l.push([-8+(i%5)*4+((i/5|0)%2)*2,-3+(i/5|0)*3.4,cl[i]]);return shell(1.3,sqCubes(l)+S('M4 -5q2 -2 4 0','lemD',.9))},
+'tm-red':function(){return shell(1.02,G(0,0,T.caviar(),0,.9))},
+'tm-shrimp':function(){return shell(1.02,G(0,-2,T.shrimp(),-6,.8)+G(6,-5,T.micro(),0,.8))},
+'tm-salmon':function(){var l=[];var cl=['salm','salmD','salm','salmL','salm','salm','salmD','salm'];for(var i=0;i<8;i++)l.push([-7+(i%4)*4.4+((i/4|0)%2)*2,-3+(i/4|0)*3.4,cl[i]]);return shell(1.02,sqCubes(l)+[[-5,-1],[1,-4],[4,1],[-1,2],[7,-2]].map(function(p){return E(p[0],p[1],.7,.4,'sesame')}).join(''))},
+'tm-cheese-ham':function(){return shell(1.02,E(0,-1.4,10,4,'mayo')+dots(0,-1.4,9,3.6,14,1.2,['ham','chs','egg','hamD'])+G(5,-5,T.basil(),30,.65))},
+'tm-salami':function(){return shell(1.02,G(0,-2,T.salami(),0,1))},
+
+'s-herring-fur':function(){return cup([['herr',3,speck(['herrD'],5,.9)],['pot',3],['car',2],['egg',2,speck(['yel'],6,.9)],['beet',3]],E(0,0,10,2.2,'mayo')+G(3,-3,T.dill(),20,.8))},
+'s-olivier':function(){return cup([['pot',6,speck(['car','peas','cuc','crab','peas','car'],18,1.1)]],G(0,0,T.masago(),0,.75)+R(-12,-3,6,2.4,1,'crab')+R(6,-2,6,2.4,1,'crab'))},
+'s-chicken':function(){return cup([['chick',4,speck(['chickD'],8,1)],['corn',2,speck(['yelD'],6,.8)],['cucC',2,speck(['cuc'],5,1)]],G(-5,-1,T.cherryHalf(),0,.9)+G(5,-2,T.quail(),0,.9))},
+'s-salmon-tartare':function(){return cup([['salm',4,speck(['salmL','salmD'],10,1.1)],['cuc',2,speck(['cucC'],5,.9)],['avo',2,speck(['avoD'],5,.8)]],G(0,0,T.caviar(),0,.9))},
+
+'r-croissant':function(){return SH+P('M24 50Q28 58 48 58Q68 58 72 50Z','syrD')+R(23,45.5,50,5,2.5,'ham')+P('M22 47C26 43 30 49 35 45S44 49 49 45S58 49 63 45S72 49 74 46V49H22Z','grn')+P('M13 52C13 36 28 23 48 22C68 23 83 36 83 52C78 47 72 45 66 46Q48 42 30 46C24 45 18 47 13 52Z','syr')+S('M22 34Q24 42 22 48M34 25.5Q32 36 34 45M48 22.6V43M62 25.5Q64 36 62 45M74 34Q72 42 74 48','syrD',1.2)+S('M26 31Q34 24.4 44 23.6','syrL',1.4)},
+'r-burrata':function(){return SH+C(48,43,16,'moz')+S('M60 37a16 16 0 0 1 -10 21','mozD',2.4)+P('M43 29C44 23 52 23 53 29Q48 31 43 29Z','mozD')+S('M45 25l-2 -3.4M48 24.4V20M51 25l2 -3.4','mozD',1.6)+S('M37 39a11 11 0 0 1 6 -7','glass',2,' stroke-opacity=".8"')+dots(48,45,10,9,13,.75,'pepper')},
+'r-salmon-rose':function(){return sq(48,47,40,24,'toast',true)+G(48,43,T.rose(),0,1.55)+G(58,38,T.micro(),0,.8)},
+'r-syrnik':function(){return SH+E(48,47,24,11,'syrD')+E(48,43.5,24,11,'syr')+E(48,43,20.4,8.8,'syrL')+dots(48,43.5,21,9,10,.8,'syrD')+E(48,41,11,5,'cream')+E(48,39.6,8,3.4,'mayo')+G(54,35,T.str(),0,1)},
+'r-fruit':function(){return SH+G(34,41,C(0,0,9.4,'orange')+C(0,0,8,'orangeL')+S('M0 0L0 -8M0 0L7.6 -2.5M0 0L4.7 6.5M0 0L-4.7 6.5M0 0L-7.6 -2.5','orange',.9))+G(62,38,C(0,0,9,'avoD')+C(0,0,7.6,'kiwi')+C(0,0,2.6,'kiwiL')+dots(0,0,4.6,4.6,10,.5,'pepper'))+G(46,52,T.pine(),0,1.5)+G(66,53,P('M-8 -2C-6 6 6 6 8 -2C4 1 -4 1 -8 -2Z','apple')+S('M-8 -2C-6 6 6 6 8 -2','red',1.6),-10)},
+'r-grape':function(){var s=SH+S('M48 21C48 16 52 13 56 13','grnD',1.6)+P('M56 13c3 -6 10 -6 12 -2c-4 4 -9 5 -12 2Z','grn');[[36,28],[44,28],[52,28],[60,28],[40,36],[48,36],[56,36],[44,44],[52,44],[48,52]].forEach(function(p){s+=G(f1(48+(p[0]-48)*.88),f1(24+(p[1]-24)*.88),T.grape('grapeR'),0,1.05)});return s},
+'r-cherry':function(){var s=SH+S('M24 30C40 24 58 26 72 33','grnD',1.7);[[34,44,1.45],[50,48,1.55],[65,45,1.45]].forEach(function(p){s+=S('M'+p[0]+' '+(p[1]-8)+'Q'+p[0]+' '+(p[1]-14)+' '+(p[0]-2)+' '+(p[1]-17),'grnD',1.3)+G(p[0],p[1],C(0,0,5.4,'tom')+S('M-3.1 -2.4a3.5 3.5 0 0 1 3.3 -2.1','glass',1.1,HI)+P('M-3 -5L0 -3.8L3 -5L1.4 -6.6L0 -5.4L-1.4 -6.6Z','grn'),0,p[2])});return s}
+};
+return function(id){var f=A[id];return '<svg viewBox="0 0 96 72" aria-hidden="true" focusable="false" stroke-linecap="round" stroke-linejoin="round">'+C(48,38,33,'plate')+(f?f():'')+'</svg>'};
+})();
+
+(function(){
+var $=function(s){return document.querySelector(s)};
+var coll=new Intl.Collator('ru');
+var nf0=new Intl.NumberFormat('ru-RU',{maximumFractionDigits:0});
+var nf1=new Intl.NumberFormat('ru-RU',{minimumFractionDigits:1,maximumFractionDigits:1});
+var nfg=new Intl.NumberFormat('ru-RU',{maximumFractionDigits:1});
+var NB=' ';
+function rub0(n){return nf0.format(Math.round(n))+NB+'₽'}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function norm(s){return String(s).toLowerCase().replace(/ё/g,'е')}
+var reduce=false;try{reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
+var smooth=reduce?'auto':'smooth';
+
+var KEY='zakuski_na_vyezd_v1';
+var state={qty:{},prices:{},guests:20,mk:3.5,mkp:'',cook:5000,ev:''};
+try{var s=JSON.parse(localStorage.getItem(KEY)||'null');if(s){state.qty=s.qty||{};state.prices=s.prices||{};state.guests=s.guests||20;if(s.mk>0)state.mk=s.mk;if(s.mkp>0)state.mkp=s.mkp;if(s.cook>=0&&s.cook!==null&&s.cook!=='')state.cook=+s.cook;state.ev=s.ev||''}}catch(e){}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+
+var open={};var filterType='Все';var query='';var ordOnly=false;var view='shelf';
+var dishes=DISHES.slice().sort(function(a,b){return coll.compare(a.n,b.n)});
+
+$('#lead').textContent=dishes.length+' закуски: вес, состав и цена за штуку. Собери заказ кнопкой + — расчёт, закупка и лист повару посчитаются сами.';
+
+function qtyText(i,q){return i.u==='шт'?nfg.format(q)+NB+'шт':nfg.format(q)+NB+'г'}
+
+function detailHTML(d){
+  var c=calcDish(d,state.prices);
+  var rows=c.rows.map(function(r){
+    var i=ING[r.id];
+    var nm=esc(i.n)+(i.pk?' <span class="pk">расходник</span>':'');
+    return '<tr><td>'+nm+'</td><td>'+qtyText(i,r.q)+'</td><td>'+(r.gross>r.q+1e-9?qtyText(i,Math.round(r.gross*10)/10):'то же')+'</td><td>'+nf1.format(r.c)+'</td></tr>';
+  }).join('');
+  var h='<div class="box"><table><thead><tr><th scope="col">Продукт</th><th scope="col">В изделии</th><th scope="col">В закупке</th><th scope="col">₽</th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td>Итого</td><td>'+nf0.format(Math.round(c.w))+NB+'г</td><td></td><td>'+nf1.format(c.cost)+'</td></tr></tfoot></table>';
+  if(d.chk)h+='<p class="warn">Уточнить: '+esc(d.chk)+'</p>';
+  return h+'</div>';
+}
+
+function rowHTML(d){
+  var c=calcDish(d,state.prices);
+  var q=state.qty[d.id]||'';
+  var isOpen=!!open[d.id];
+  return '<tr class="dish'+(isOpen?' open':'')+'" data-id="'+d.id+'">'+
+    '<td class="name"><div class="nm"><span class="art">'+artSVG(d.id)+'</span><div class="nb"><button class="tg" type="button" aria-expanded="'+isOpen+'" aria-controls="dt-'+d.id+'"><span class="chev" aria-hidden="true"></span><span>'+esc(d.n)+'</span></button>'+
+    '<div class="meta">'+(d.prem?'<span class="prem">Премиум</span>':'')+'<span class="chip">'+esc(d.t)+'</span><span>фото '+d.p.join(', ')+'</span>'+(d.chk?'<span class="chk">уточнить</span>':'')+'</div>'+
+    '<p class="ds">'+esc(d.d)+'</p></div></div></td>'+
+    '<td class="num" data-l="Вес, г">'+nf0.format(Math.round(c.w))+'</td>'+
+    '<td class="num" data-l="Себестоимость, ₽">'+nf1.format(c.cost)+'</td>'+
+    '<td class="num" data-l="За 10 шт, ₽">'+nf0.format(Math.round(c.cost*10))+'</td>'+
+    '<td class="num qty" data-l="В заказ, шт"><input class="q'+(q?' has':'')+'" type="number" min="0" step="1" inputmode="numeric" id="q-'+d.id+'" data-id="'+d.id+'" value="'+q+'" aria-label="Количество: '+esc(d.n)+'"></td></tr>'+
+    '<tr class="detail" id="dt-'+d.id+'"><td colspan="5"><div class="dtl"><div>'+detailHTML(d)+'</div></div></td></tr>';
+}
+
+function visible(d){
+  if(ordOnly&&!state.qty[d.id])return false;
+  if(filterType==='Премиум'){if(!d.prem)return false}else if(filterType!=='Все'&&d.t!==filterType)return false;
+  if(!query)return true;
+  var hay=norm(d.n+' '+d.d+' '+d.c.map(function(x){return ING[x[0]].n}).join(' '));
+  return query.split(/\s+/).every(function(w){return hay.indexOf(w)>=0});
+}
+
+function renderTable(){
+  var list=dishes.filter(visible);
+  $('#tbody').innerHTML=list.length?list.map(rowHTML).join(''):'<tr><td colspan="5" class="empty">Ничего не найдено. Измените запрос или выберите другую группу.</td></tr>';
+  renderViews(list);
+}
+
+function chipsHTML(){
+  return ['Все','Премиум'].concat(TYPES).map(function(t){
+    var n=t==='Все'?dishes.length:dishes.filter(function(d){return t==='Премиум'?d.prem:d.t===t}).length;
+    return '<button class="chip-b" type="button" data-t="'+esc(t)+'" aria-pressed="'+(t===filterType)+'">'+esc(t)+'<span class="n">'+n+'</span></button>';
+  }).join('');
+}
+function renderChips(){var h=chipsHTML();$('#chips').innerHTML=h;$('#dGroups').innerHTML=h}
+
+function renderLetters(){
+  var letters=[];
+  dishes.forEach(function(d){var L=d.n.charAt(0).toUpperCase();if(letters.indexOf(L)<0)letters.push(L)});
+  $('#dLetters').innerHTML=letters.map(function(L){return '<button class="lt" type="button" data-l="'+L+'" aria-label="Закуски на букву '+L+'">'+L+'</button>'}).join('');
+}
+
+function renderDList(){
+  var q=norm($('#dsearch').value).trim();
+  var list=dishes.filter(function(d){return !q||norm(d.n+' '+d.t).indexOf(q)>=0});
+  $('#dList').innerHTML=list.length?list.map(function(d){
+    var k=state.qty[d.id];
+    return '<li><button class="di" type="button" data-id="'+d.id+'"><span>'+esc(d.n)+'</span>'+(k?'<span class="qb">'+k+'</span>':'')+'</button></li>';
+  }).join(''):'<li class="dempty">Ничего не найдено.</li>';
+}
+
+function packLabel(i){return i.u==='шт'?nfg.format(i.pack)+NB+'шт':(i.pack>=1000?nfg.format(i.pack/1000)+NB+'кг':nfg.format(i.pack)+NB+'г')}
+
+function renderPrices(){
+  var ids=Object.keys(ING).sort(function(a,b){return coll.compare(ING[a].n,ING[b].n)});
+  $('#ptbody').innerHTML=ids.map(function(id){
+    var i=ING[id];
+    var p=state.prices[id]!=null?state.prices[id]:i.price;
+    var per=i.u==='шт'?p/i.pack:p/i.pack*1000;
+    return '<tr data-ing="'+id+'"><td>'+esc(i.n)+'<span class="sm">'+esc(i.shop)+'</span></td><td>'+packLabel(i)+'</td>'+
+      '<td><input class="pi'+(state.prices[id]!=null?' chg':'')+'" type="number" min="0" step="1" inputmode="decimal" data-ing="'+id+'" value="'+p+'" aria-label="Цена упаковки: '+esc(i.n)+'"></td>'+
+      '<td data-per>'+nf1.format(per)+'</td>'+
+      '<td><span class="tag '+i.src+'">'+(i.src==='vv'?'ВкусВилл':'Оценка')+'</span></td></tr>';
+  }).join('');
+}
+
+function renderShop(){
+  var L=shopList(state.qty,state.prices);
+  var card=$('#shopCard');
+  if(!L.pcs){
+    card.innerHTML='<p class="empty" style="padding:0">Добавь закуски в заказ — здесь появится список продуктов по упаковкам.</p>';
+    return;
+  }
+  var rows=L.rows.slice().sort(function(a,b){return coll.compare(ING[a.id].n,ING[b.id].n)}).map(function(r){
+    var i=ING[r.id];
+    return '<tr><td>'+esc(i.n)+'</td><td>'+qtyText(i,Math.round(r.need*10)/10)+'</td><td>'+r.packs+' × '+packLabel(i)+'</td><td>'+rub0(r.sum)+'</td></tr>';
+  }).join('');
+  card.innerHTML='<div class="tbl-wrap"><table><thead><tr><th scope="col">Продукт</th><th scope="col">Нужно</th><th scope="col">Купить</th><th scope="col">Сумма</th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="3">Закупка по упаковкам</td><td>'+rub0(L.total)+'</td></tr><tr><td colspan="3">Себестоимость по граммам</td><td>'+rub0(L.exact)+'</td></tr></tfoot></table></div>'+
+    '<div class="btns"><button class="btn" id="copyList" type="button">Скопировать список</button><button class="btn ghost" id="clearOrder" type="button">Очистить заказ</button></div><p class="sub" id="copyMsg" role="status" style="margin:.6rem 0 0"></p>';
+}
+
+function renderBar(){
+  var L=shopList(state.qty,state.prices);
+  var g=Math.max(1,+state.guests||1);
+  var pcs=nf0.format(L.pcs)+NB+'шт';
+  $('#bPcs').textContent=pcs;
+  $('#bGuest').textContent=L.pcs?nfg.format(Math.round(L.pcs/g*10)/10)+' шт и '+nf0.format(Math.round(L.wt/g))+NB+'г на гостя':'Добавь закуски кнопкой +';
+  $('#bSum').textContent=rub0(L.total);
+  $('#dPcs').textContent=pcs;
+  $('#dSum').textContent=rub0(L.total);
+}
+
+function refreshOrder(){renderShop();renderBar();renderDList();if(calcOpen)renderCalc();updOrdN();if(typeof QZ!=='undefined'&&QZ&&QZ.st==='start'&&$('#quiz'))renderQuiz()}
+
+/* шторка навигации */
+var drawer=$('#drawer'),scrim=$('#scrim'),tab=$('#navTab');
+function setDrawer(on,returnFocus){
+  drawer.classList.toggle('open',on);
+  scrim.classList.toggle('on',on);
+  tab.setAttribute('aria-expanded',String(on));
+  document.body.classList.toggle('dopen',on);
+  drawer.inert=!on;
+  if(on){setTimeout(function(){$('#dClose').focus()},80)}
+  else if(returnFocus){tab.focus()}
+}
+function flash(tr){tr.classList.remove('flash');void tr.offsetWidth;tr.classList.add('flash');setTimeout(function(){tr.classList.remove('flash')},1900)}
+function goDish(id,expand,block){
+  if(view!=='table'){setDrawer(false,false);if(expand){setTimeout(function(){openSheet(id)},180)}else{setTimeout(function(){azJumpId(id)},160)}return}
+  var rerender=false;
+  if(filterType!=='Все'||query){filterType='Все';query='';$('#search').value='';rerender=true}
+  if(expand)open[id]=true;
+  if(rerender){renderChips();renderTable()}
+  else if(expand){var r0=document.querySelector('tr.dish[data-id="'+id+'"]');if(r0){r0.classList.add('open');r0.querySelector('.tg').setAttribute('aria-expanded','true')}}
+  setDrawer(false,false);
+  setTimeout(function(){
+    var r=document.querySelector('tr.dish[data-id="'+id+'"]');
+    if(!r)return;
+    r.scrollIntoView({behavior:smooth,block:block});flash(r);
+  },140);
+}
+function goSection(id){
+  setDrawer(false,false);
+  setTimeout(function(){var el=document.getElementById(id);if(el){var f=el.querySelector('details.fold');if(f)f.open=true;el.scrollIntoView({behavior:smooth,block:'start'})}},140);
+}
+function setFilter(t,fromDrawer){
+  filterType=t;renderChips();renderTable();
+  if(fromDrawer)goSection('menu');
+}
+
+tab.addEventListener('click',function(){setDrawer(!drawer.classList.contains('open'),false)});
+$('#dClose').addEventListener('click',function(){setDrawer(false,true)});
+scrim.addEventListener('click',function(){setDrawer(false,true)});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&drawer.classList.contains('open'))setDrawer(false,true)});
+var tx=null;
+drawer.addEventListener('touchstart',function(e){tx=e.touches[0].clientX},{passive:true});
+drawer.addEventListener('touchend',function(e){if(tx===null)return;var dx=e.changedTouches[0].clientX-tx;tx=null;if(dx>70)setDrawer(false,true)},{passive:true});
+$('#dsearch').addEventListener('input',renderDList);
+drawer.addEventListener('click',function(e){
+  var t;
+  if((t=e.target.closest('[data-calc]'))){setDrawer(false,false);setTimeout(openCalc,160);return}
+  if((t=e.target.closest('[data-go]'))){goSection(t.getAttribute('data-go'));return}
+  if((t=e.target.closest('.di'))){goDish(t.getAttribute('data-id'),true,'center');return}
+  if((t=e.target.closest('.lt'))){
+    var L=t.getAttribute('data-l');
+    var d=dishes.filter(function(x){return x.n.charAt(0).toUpperCase()===L})[0];
+    if(d)goDish(d.id,false,'start');
+    return;
+  }
+  if((t=e.target.closest('.chip-b'))){setFilter(t.getAttribute('data-t'),true)}
+});
+
+$('#chips').addEventListener('click',function(e){
+  var b=e.target.closest('.chip-b');if(!b)return;
+  setFilter(b.getAttribute('data-t'),false);
+});
+$('#search').addEventListener('input',function(e){
+  query=norm(e.target.value).trim();renderTable();
+});
+$('#tbody').addEventListener('click',function(e){
+  var b=e.target.closest('.tg');if(!b)return;
+  var tr=b.closest('tr.dish');var id=tr.getAttribute('data-id');
+  open[id]=!open[id];tr.classList.toggle('open',open[id]);b.setAttribute('aria-expanded',String(!!open[id]));
+});
+$('#tbody').addEventListener('input',function(e){
+  var el=e.target;if(!el.classList.contains('q'))return;
+  var v=parseInt(el.value,10);
+  if(v>0)state.qty[el.getAttribute('data-id')]=v;else delete state.qty[el.getAttribute('data-id')];
+  el.classList.toggle('has',v>0);persist();refreshOrder();
+});
+$('#ptbody').addEventListener('change',function(e){
+  var el=e.target;if(!el.classList.contains('pi'))return;
+  var id=el.getAttribute('data-ing');var v=parseFloat(el.value);var i=ING[id];
+  if(!(v>=0)||v===i.price){delete state.prices[id];el.value=i.price}else state.prices[id]=v;
+  var p=state.prices[id]!=null?state.prices[id]:i.price;
+  el.classList.toggle('chg',state.prices[id]!=null);
+  el.closest('tr').querySelector('[data-per]').textContent=nf1.format(i.u==='шт'?p/i.pack:p/i.pack*1000);
+  persist();renderTable();refreshOrder();
+});
+$('#resetPrices').addEventListener('click',function(){state.prices={};persist();renderPrices();renderTable();refreshOrder()});
+$('#guests').addEventListener('input',function(e){var v=parseInt(e.target.value,10);state.guests=v>0?v:20;persist();renderBar();if(calcOpen)renderCalc()});
+$('#shopCard').addEventListener('click',function(e){
+  if(e.target.id==='clearOrder'){state.qty={};persist();renderTable();refreshOrder();return}
+  if(e.target.id==='copyList'){
+    var L=shopList(state.qty,state.prices);
+    var txt=L.rows.slice().sort(function(a,b){return coll.compare(ING[a.id].n,ING[b.id].n)}).map(function(r){
+      var i=ING[r.id];return i.n+': '+r.packs+' × '+packLabel(i).replace(NB,' ')+' = '+Math.round(r.sum)+' ₽';
+    }).join('\n')+'\nИтого по упаковкам: '+Math.round(L.total)+' ₽';
+    var msg=$('#copyMsg');
+    var done=function(ok){msg.textContent=ok?'Список скопирован.':'Не удалось скопировать, выделите таблицу вручную.'};
+    try{navigator.clipboard.writeText(txt).then(function(){done(true)},function(){done(false)})}catch(err){done(false)}
+  }
+});
+
+/* расчёт: лист гостю и лист повару */
+var calcEl=$('#calc'),calcOpen=false,sheet='guest',dlApi=null;
+function today(){try{return new Date().toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'})}catch(e){return ''}}
+function isoDate(){var d=new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
+function orderNow(){var o=ACT&&oById(ACT);if(o&&o.fx)return orderCalc(state.qty,o.fx.prices,o.fx.mk,o.fx.mkp,o.cook!=null?o.cook:state.cook);return orderCalc(state.qty,state.prices,state.mk,state.mkp,state.cook)}
+function sortedItems(items){return items.slice().sort(function(a,b){return TYPES.indexOf(a.d.t)-TYPES.indexOf(b.d.t)||coll.compare(a.d.n,b.d.n)})}
+function guestsN(){return Math.max(1,+state.guests||1)}
+function compText(d){return calcDish(d,state.prices).rows.filter(function(r){return !ING[r.id].pk}).map(function(r){var i=ING[r.id];return i.n.charAt(0).toLowerCase()+i.n.slice(1)+NB+qtyText(i,r.q)}).join(' · ')}
+
+function headHTML(kind,O){
+  return '<header class="sh"><div><p class="sk">'+(kind==='guest'?'Предложение':'Лист повара')+'</p><h3>'+(kind==='guest'?'Меню закусок':'Заготовка закусок')+'</h3>'+(state.ev?'<p class="sev">'+esc(state.ev)+'</p>':'')+'</div>'+
+    '<dl class="smeta"><div><dt>Дата</dt><dd>'+sheetDate()+'</dd></div><div><dt>Гостей</dt><dd>'+guestsN()+'</dd></div><div><dt>Всего</dt><dd>'+nf0.format(O.pcs)+NB+'шт</dd></div></dl></header>';
+}
+function guestSheet(O){
+  var g=guestsN(),cur='';
+  var h=headHTML('guest',O)+'<table class="st"><thead><tr><th class="sa"><span class="vh">Вид</span></th><th class="tl">Позиция</th><th class="cw">Вес, г</th><th>Цена, ₽</th><th>Шт</th><th>Сумма, ₽</th></tr></thead><tbody>';
+  sortedItems(O.items).forEach(function(it){
+    if(it.d.t!==cur){cur=it.d.t;h+='<tr class="sg"><td colspan="6">'+esc(cur)+'</td></tr>'}
+    var c=calcDish(it.d,state.prices);
+    h+='<tr><td class="sa">'+artSVG(it.d.id)+'</td><td class="tl"><b>'+esc(it.d.n)+'</b>'+(it.d.prem?' <span class="prem">Премиум</span>':'')+'<span class="sd">'+esc(it.d.d)+'</span></td><td class="cw">'+nf0.format(Math.round(c.w))+'</td><td>'+nf0.format(it.p)+'</td><td>'+it.k+'</td><td>'+nf0.format(it.sum)+'</td></tr>';
+  });
+  h+='</tbody><tfoot><tr><td></td><td class="tl">Итого</td><td class="cw"></td><td></td><td>'+nf0.format(O.pcs)+'</td><td>'+rub0(O.rev)+'</td></tr></tfoot></table>';
+  return h+'<p class="snote">На одного гостя: '+nfg.format(Math.round(O.pcs/g*10)/10)+NB+'шт на '+rub0(O.rev/g)+'. Цены указаны за одну штуку.</p>';
+}
+function cookSheet(O){
+  var cur='';
+  var h=headHTML('cook',O)+cookExtra()+'<h4>Что готовим</h4><table class="st"><thead><tr><th class="sb"><span class="vh">Готово</span></th><th class="sa"><span class="vh">Вид</span></th><th class="tl">Позиция и состав на 1 шт</th><th>Шт</th></tr></thead><tbody>';
+  sortedItems(O.items).forEach(function(it){
+    if(it.d.t!==cur){cur=it.d.t;h+='<tr class="sg"><td colspan="4">'+esc(cur)+'</td></tr>'}
+    h+='<tr><td class="sb"><span class="cbx"></span></td><td class="sa">'+artSVG(it.d.id)+'</td><td class="tl"><b>'+esc(it.d.n)+'</b><span class="sd">'+esc(compText(it.d))+'</span>'+(it.d.chk?'<span class="swarn">Уточнить: '+esc(it.d.chk)+'</span>':'')+'</td><td class="sn">'+it.k+'</td></tr>';
+  });
+  h+='</tbody></table><h4>Продукты на весь заказ</h4><table class="st"><thead><tr><th class="sb"><span class="vh">Есть</span></th><th class="tl">Продукт</th><th>Нужно</th><th>Купить</th></tr></thead><tbody>';
+  O.L.rows.slice().sort(function(a,b){return (ING[a.id].pk?1:0)-(ING[b.id].pk?1:0)||coll.compare(ING[a.id].n,ING[b.id].n)}).forEach(function(r){
+    var i=ING[r.id];
+    h+='<tr><td class="sb"><span class="cbx"></span></td><td class="tl">'+esc(i.n)+(i.pk?' <span class="sd il">расходник</span>':'')+'</td><td>'+qtyText(i,Math.round(r.need*10)/10)+'</td><td>'+r.packs+' × '+packLabel(i)+'</td></tr>';
+  });
+  return h+'</tbody></table><p class="snote">Вес указан нетто готового изделия, без шпажки и стаканчика. В столбце «Нужно» уже учтены потери на чистку и обжарку.</p>';
+}
+function econHTML(O){
+  if(!O.pcs)return '<p class="hint">Появится, когда в заказе будут позиции.</p>';
+  var pct=O.rev>0?Math.round(O.left/O.rev*100):0;
+  function row(l,v,cls){return '<div class="erow'+(cls?' '+cls:'')+'"><span>'+l+'</span><b>'+v+'</b></div>'}
+  return row('Выручка по листу гостя',rub0(O.rev))+row('Закупка по упаковкам','−'+NB+rub0(O.buy))+row('Смена повара','−'+NB+rub0(O.cook))+
+    row('Остаётся',rub0(O.left),'tot'+(O.left<0?' neg':''))+'<p class="hint">Это '+pct+'% выручки до налога. Остатки продуктов из упаковок остаются у вас и сюда не входят.</p>';
+}
+function renderCalc(){
+  var O=orderNow();
+  $('#econ').innerHTML=econHTML(O);
+  var empty=!O.pcs;
+  $('#cSave').disabled=empty;$('#cCopy').disabled=empty;
+  $('#sheetBox').innerHTML=empty?'<div class="sheet on sempty"><p>Пока пусто. Добавь закуски кнопкой +, и здесь соберутся лист для гостя и лист для повара.</p></div>':
+    '<article class="sheet'+(sheet==='guest'?' on':'')+'" id="sheetGuest" role="tabpanel" aria-labelledby="tabGuest">'+guestSheet(O)+'</article>'+
+    '<article class="sheet'+(sheet==='cook'?' on':'')+'" id="sheetCook" role="tabpanel" aria-labelledby="tabCook">'+cookSheet(O)+'</article>';
+}
+function setSheet(k){
+  sheet=k;
+  [['guest','#tabGuest','#sheetGuest'],['cook','#tabCook','#sheetCook']].forEach(function(x){var on=x[0]===k;$(x[1]).setAttribute('aria-selected',String(on));var el=$(x[2]);if(el)el.classList.toggle('on',on)});
+  $('#cMsg').textContent='';
+}
+function openCalc(){
+  calcOpen=true;renderCalc();setSheet(sheet);
+  calcEl.inert=false;calcEl.classList.add('open');document.body.classList.add('copen');calcEl.scrollTop=0;
+  setTimeout(function(){$('#cClose').focus()},60);
+}
+function closeCalc(){
+  calcOpen=false;calcEl.classList.remove('open');calcEl.inert=true;document.body.classList.remove('copen');$('#toCalc').focus();
+}
+function num(v){return parseFloat(String(v).replace(',','.').replace(/\s/g,''))}
+function fillFields(){$('#mk').value=String(state.mk).replace('.',',');$('#mkp').value=state.mkp>0?String(state.mkp).replace('.',','):'';$('#cookPay').value=state.cook;$('#evName').value=state.ev}
+function sheetText(kind){
+  var O=orderNow(),its=sortedItems(O.items);
+  var head=(kind==='guest'?'Меню закусок':'Лист повара')+(state.ev?' · '+state.ev:'')+' · '+sheetDate()+' · гостей: '+guestsN();
+  if(kind==='guest')return head+'\n\n'+its.map(function(it){return it.d.n+' — '+it.k+' шт × '+it.p+' ₽ = '+it.sum+' ₽'}).join('\n')+'\n\nИтого: '+O.pcs+' шт, '+Math.round(O.rev)+' ₽';
+  return head+cookTextExtra()+'\n\nЧто готовим:\n'+its.map(function(it){return '☐ '+it.d.n+' — '+it.k+' шт ('+compText(it.d).replace(/ /g,' ')+')'}).join('\n')+
+    '\n\nПродукты:\n'+O.L.rows.map(function(r){var i=ING[r.id];return '☐ '+i.n+': '+qtyText(i,Math.round(r.need*10)/10).replace(NB,' ')+', купить '+r.packs+' × '+packLabel(i).replace(NB,' ')}).join('\n');
+}
+function standalone(kind){
+  var css=Array.prototype.map.call(document.querySelectorAll('style'),function(s){return s.textContent}).join('\n');
+  var el=document.getElementById(kind==='guest'?'sheetGuest':'sheetCook');
+  return '<!doctype html><html lang="ru" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>'+(kind==='guest'?'Меню закусок':'Лист повара')+'</title>'+
+    '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Jost:wght@300;400;500&display=swap"><style>'+css+'</style></head><body class="dl"><article class="sheet on">'+el.innerHTML+'</article></body></html>';
+}
+function cmsg(t){$('#cMsg').textContent=t}
+
+$('#toCalc').addEventListener('click',openCalc);
+$('#cClose').addEventListener('click',closeCalc);
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&calcOpen&&!drawer.classList.contains('open'))closeCalc()});
+$('#calc').addEventListener('click',function(e){var t=e.target.closest('[data-sheet]');if(t)setSheet(t.getAttribute('data-sheet'))});
+$('#mk').addEventListener('input',function(e){var v=num(e.target.value);if(v>0){state.mk=v;persist();renderCalc()}});
+$('#mkp').addEventListener('input',function(e){var v=num(e.target.value);state.mkp=v>0?v:'';persist();renderCalc()});
+$('#cookPay').addEventListener('input',function(e){var v=num(e.target.value);state.cook=v>=0?v:0;persist();renderCalc()});
+$('#evName').addEventListener('input',function(e){state.ev=e.target.value.slice(0,80);persist();renderCalc()});
+['#mk','#mkp','#cookPay'].forEach(function(s){$(s).addEventListener('change',fillFields)});
+$('#cCopy').addEventListener('click',function(){
+  var txt=sheetText(sheet);
+  try{navigator.clipboard.writeText(txt).then(function(){cmsg('Лист скопирован текстом, его можно вставить в мессенджер.')},function(){cmsg('Не удалось скопировать.')})}catch(err){cmsg('Не удалось скопировать.')}
+});
+$('#cSave').addEventListener('click',function(){
+  if(!dlApi){var kd=sheet,fn='chefs01-'+(kd==='guest'?'gost':'povar')+'-'+isoDate()+'.html',ttl=kd==='guest'?'Меню закусок':'Лист повара';
+    try{var fl=new File([standalone(kd)],fn,{type:'text/html'});if(navigator.canShare&&navigator.canShare({files:[fl]})){navigator.share({files:[fl],title:ttl}).then(function(){cmsg('Лист отправлен.')},function(){});return}}catch(_e){}
+    if(navigator.share){navigator.share({title:ttl,text:sheetText(kd)}).catch(function(){});return}
+    window.print();return}
+  var kind=sheet;
+  dlApi.save({filename:'zakuski-'+(kind==='guest'?'gost':'povar')+'-'+isoDate()+'.html',data:standalone(kind)}).then(function(){
+    cmsg('Файл сохранён. Откройте его в браузере и распечатайте.');
+  },function(e){
+    var c=e&&e.code;
+    if(c==='declined')cmsg('Сохранение отменено.');
+    else if(c==='rate_limited')cmsg('Подождите пару секунд и попробуйте снова.');
+    else{cmsg('Сохранить файл здесь не получилось. Скопируйте лист текстом.');if(c!=='too_large')$('#cSave').hidden=true}
+  });
+});
+try{if(window.claude&&typeof window.claude.use==='function'){window.claude.use('downloads').then(function(m){dlApi=m;if(m)$('#cSave').hidden=false},function(){})}}catch(e){}
+fillFields();
+try{var pfn=Object.keys(ING).length;$('#pfN').textContent=pfn+' продуктов · цены упаковок, можно поправить'}catch(e){}
+
+/* ===== Chefs 01: полки, плитка, шкала А–Я, карточка блюда, раздел повару ===== */
+var VKEY='chefs01_view';
+try{var v0=localStorage.getItem(VKEY);if(v0==='shelf'||v0==='grid'||v0==='table')view=v0}catch(e){}
+function letterOf(d){return d.n.charAt(0).toUpperCase()}
+function lc(s){return s.charAt(0).toLowerCase()+s.slice(1)}
+function gp(d){return guestPrice(d,state.prices,state.mk,state.mkp)}
+function dishById(id){for(var i=0;i<DISHES.length;i++)if(DISHES[i].id===id)return DISHES[i];return null}
+
+/* стартовые правила по группам (не нормы СанПиН) */
+var RULES={
+ 'Брускетты':{when:'На месте, не раньше чем за 30 минут до подачи',
+  ahead:'Багет нарезать и подсушить накануне, хранить в сухом закрытом контейнере. Намазки и начинки готовы заранее, держать при +2…+6 °C.',
+  place:'Намазать, выложить начинку и украсить не раньше чем за 30 минут до подачи, иначе хлеб размокнет.',
+  store:'Начинки при +2…+6 °C. Готовые брускетты на столе — ориентир не дольше 1 часа.',
+  std:'Хлеб хрустит, начинка лежит в пределах ломтика, микрозелень сверху свежая.',
+  bad:['Собрали за 2–3 часа — хлеб размок','Начинка свисает с края ломтика','Слишком толстый слой намазки']},
+ 'Канапе и шпажки':{when:'За 1–2 часа, под плёнкой в холоде',
+  ahead:'Сыр, колбасы и овощи нарезать заранее одинаковыми кубиками, хранить раздельно при +2…+6 °C.',
+  place:'Собрать за 1–2 часа и накрыть плёнкой. Канапе на хлебе — за 1 час, чтобы хлеб не заветрился.',
+  store:'+2…+6 °C под плёнкой. На столе — ориентир не дольше 1 часа.',
+  std:'Все штуки одной высоты, шпажка ровно по центру, стоят ровными рядами.',
+  bad:['Кубики разного размера','Шпажка не по центру — канапе падает','Края хлеба заветрились']},
+ 'Тарталетки':{when:'За 30–60 минут до подачи',
+  ahead:'Начинки и кремы приготовить заранее и держать в кондитерских мешках при +2…+6 °C. Корзинки хранить сухими.',
+  place:'Наполнять за 30–60 минут до подачи: кремовая начинка размачивает тесто.',
+  store:'Начинки при +2…+6 °C. Готовые на столе — ориентир не дольше 1 часа.',
+  std:'Начинка вровень с краем или аккуратной шапкой, борт корзинки целый.',
+  bad:['Размокшее дно корзинки','Начинка выше края и падает','Крошки теста на блюде']},
+ 'Салаты в стаканчиках':{when:'За 1–2 часа, соус — за 30 минут',
+  ahead:'Компоненты нарезать заранее, соус и заправку хранить отдельно при +2…+6 °C.',
+  place:'Разложить по стаканчикам за 1–2 часа и накрыть. Соус и украшение — за 30 минут до подачи.',
+  store:'+2…+6 °C накрытыми. На столе — ориентир не дольше 1 часа.',
+  std:'Стенки стаканчика чистые, слои ровные, высота одинаковая во всех стаканчиках.',
+  bad:['Потёки соуса по стенкам','Разная высота слоёв','Заправили заранее — салат потёк']},
+ 'Бранч-бокс':{when:'За 1 час до подачи',
+  ahead:'Нарезка, начинки и соусы готовы заранее, при +2…+6 °C. Выпечку заранее не резать.',
+  place:'Разрезать выпечку и собрать за 1 час до подачи.',
+  store:'+2…+6 °C. На столе — ориентир не дольше 1 часа.',
+  std:'Начинка видна в разрезе, всё держится при укусе, порции одинаковые.',
+  bad:['Выпечку разрезали заранее — подсохла','Начинка выпадает при укусе','Соус пропитал хлеб']}
+};
+
+/* ---------- плитки и полки ---------- */
+function tileHTML(d){
+  var c=calcDish(d,state.prices),k=state.qty[d.id]||0;
+  return '<article class="tile'+(k?' on':'')+'" data-id="'+d.id+'" data-l="'+letterOf(d)+'">'+
+   (d.prem?'<span class="tprem">Премиум</span>':'')+
+   '<button class="topen" type="button" data-open="'+d.id+'" aria-label="Открыть карточку: '+esc(d.n)+'"><span class="tart">'+artSVG(d.id)+'</span><span class="tnm">'+esc(d.n)+'</span></button>'+
+   '<div class="tmeta"><span>'+nf0.format(Math.round(c.w))+NB+'г</span><span title="Цена для гостя">'+nf0.format(gp(d))+NB+'₽</span></div>'+
+   '<div class="tq" role="group" aria-label="Количество: '+esc(d.n)+'"><button class="qminus" type="button" data-q="-1" data-id="'+d.id+'" aria-label="Меньше"'+(k?'':' disabled')+'>−</button><span class="qv">'+k+'</span><button class="qplus" type="button" data-q="1" data-id="'+d.id+'" aria-label="Больше">+</button></div></article>';
+}
+function emptyHTML(){return '<p class="vempty">Ничего не найдено. Измените запрос, группу или снимите фильтр «В заказе».</p>'}
+function renderViews(list){
+  var sh=$('#shelves'),gr=$('#tgrid');
+  if(view==='shelf'){
+    var types=TYPES.filter(function(t){return list.some(function(d){return d.t===t})});
+    sh.innerHTML=types.length?types.map(function(t){
+      var items=list.filter(function(d){return d.t===t});
+      return '<section class="shelf" aria-label="'+esc(t)+'"><div class="shh"><h3>'+esc(t)+'</h3><span class="shn">'+items.length+'</span><button class="shall" type="button" data-t="'+esc(t)+'">Все '+items.length+' →</button></div><div class="srow">'+items.map(tileHTML).join('')+'</div></section>';
+    }).join(''):emptyHTML();
+    gr.innerHTML='';
+  }else if(view==='grid'){gr.innerHTML=list.length?list.map(tileHTML).join(''):emptyHTML();sh.innerHTML=''}
+  else{sh.innerHTML='';gr.innerHTML=''}
+  renderAZ(list);updOrdN();azVis();
+}
+function updOrdN(){var n=0;for(var k in state.qty)if(state.qty[k]>0)n++;var el=$('#ordN');if(el)el.textContent=n}
+function syncTiles(id){
+  var k=state.qty[id]||0;
+  [].forEach.call(document.querySelectorAll('.tile[data-id="'+id+'"]'),function(t){
+    t.classList.toggle('on',k>0);var v=t.querySelector('.qv');if(v)v.textContent=k;var m=t.querySelector('.qminus');if(m)m.disabled=!k;
+  });
+  if(sheetId===id)renderSheetQty();
+}
+function setQty(id,v){
+  v=Math.max(0,Math.min(9999,Math.round(+v||0)));
+  if(v>0)state.qty[id]=v;else delete state.qty[id];
+  persist();
+  var inp=document.getElementById('q-'+id);if(inp){inp.value=v||'';inp.classList.toggle('has',v>0)}
+  syncTiles(id);refreshOrder();
+  if(ordOnly&&!v)renderTable();
+}
+function setView(v){
+  view=v;try{localStorage.setItem(VKEY,v)}catch(e){}
+  document.body.classList.remove('v-shelf','v-grid','v-table');document.body.classList.add('v-'+v);
+  [].forEach.call(document.querySelectorAll('.views [data-v]'),function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-v')===v))});
+  renderTable();
+}
+function tileClick(e){
+  var b=e.target.closest('[data-q]');
+  if(b){var id=b.getAttribute('data-id');setQty(id,(state.qty[id]||0)+(+b.getAttribute('data-q')));return}
+  var o=e.target.closest('[data-open]');if(o){openSheet(o.getAttribute('data-open'));return}
+  var a=e.target.closest('.shall');
+  if(a){filterType=a.getAttribute('data-t');renderChips();setView('grid');$('#menu').scrollIntoView({behavior:smooth,block:'start'})}
+}
+$('#shelves').addEventListener('click',tileClick);
+$('#tgrid').addEventListener('click',tileClick);
+$('#menu').addEventListener('click',function(e){var b=e.target.closest('.views [data-v]');if(b)setView(b.getAttribute('data-v'))});
+$('#ordF').addEventListener('click',function(){ordOnly=!ordOnly;this.setAttribute('aria-pressed',String(ordOnly));renderTable()});
+$('#tbody').addEventListener('input',function(e){var el=e.target;if(el.classList.contains('q'))syncTiles(el.getAttribute('data-id'))});
+
+/* ---------- шкала А–Я ---------- */
+var azList=[],az=$('#az'),azb=$('#azb'),azOn=false,azLast='',inMenu=false;
+function renderAZ(list){
+  azList=list;var L=[];
+  list.forEach(function(d){var l=letterOf(d);if(L.indexOf(l)<0)L.push(l)});
+  az.innerHTML=L.map(function(l){return '<span data-l="'+l+'">'+l+'</span>'}).join('');
+}
+function azVis(){document.body.classList.toggle('azon',inMenu&&view!=='shelf'&&azList.length>8)}
+function scrollToEl(el,off){if(!el)return;var y=el.getBoundingClientRect().top+(window.pageYOffset||document.documentElement.scrollTop)-off;window.scrollTo(0,Math.max(0,y))}
+function azJump(l){
+  var d=azList.filter(function(x){return letterOf(x)===l})[0];if(!d)return;
+  var el=view==='grid'?document.querySelector('#tgrid .tile[data-id="'+d.id+'"]'):document.querySelector('tr.dish[data-id="'+d.id+'"]');
+  scrollToEl(el,view==='table'?52:14);
+}
+function azJumpId(id){
+  if(view==='shelf'){setView('grid')}
+  setTimeout(function(){var el=document.querySelector('#tgrid .tile[data-id="'+id+'"]');scrollToEl(el,14);if(el){el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash')}},60);
+}
+function azAt(y){var s=az.children;if(!s.length)return null;var r=az.getBoundingClientRect();var i=Math.floor((y-r.top)/(r.height/s.length));return s[Math.max(0,Math.min(s.length-1,i))]}
+function azMove(e){
+  var s=azAt(e.clientY);if(!s)return;var l=s.getAttribute('data-l');
+  azb.textContent=l;azb.classList.add('on');
+  if(l!==azLast){azLast=l;azJump(l);[].forEach.call(az.children,function(x){x.classList.toggle('cur',x===s)})}
+}
+function azEnd(){azOn=false;azb.classList.remove('on');[].forEach.call(az.children,function(x){x.classList.remove('cur')})}
+az.addEventListener('pointerdown',function(e){azOn=true;azLast='';try{az.setPointerCapture(e.pointerId)}catch(_e){}azMove(e);e.preventDefault()});
+az.addEventListener('pointermove',function(e){if(azOn){azMove(e);e.preventDefault()}});
+az.addEventListener('pointerup',azEnd);az.addEventListener('pointercancel',azEnd);
+try{new IntersectionObserver(function(en){en.forEach(function(x){inMenu=x.isIntersecting});azVis()},{rootMargin:'-30% 0px -30% 0px'}).observe($('#menu'))}catch(e){}
+
+/* ---------- карточка блюда ---------- */
+var sheet$=$('#dsheet'),sheetId=null,sheetTab='comp',lastFocus=null;
+function stepsFor(d){
+  var out=[],last=d.c.length-1,pick=false,cup=false,s=[];
+  d.c.forEach(function(r,i){
+    var id=r[0],q=r[1],I0=ING[id];
+    if(id==='pick'){pick=true;return}if(id==='cup'){cup=true;return}
+    out.push({nm:lc(I0.n),amt:qtyText(I0,q),garn:(i>=last-1&&q<=2&&I0.u!=='шт')||/зелен|щавел|кунжут/i.test(I0.n)});
+  });
+  if(cup)s.push('Выставить стаканчики рядами, чтобы собирать конвейером.');
+  out.forEach(function(x,i){
+    if(i===0&&!cup)s.push('Основа: '+x.nm+', '+x.amt+'.');
+    else if(x.garn&&i>0)s.push('Украсить: '+x.nm+', '+x.amt+'.');
+    else s.push('Выложить '+x.nm+', '+x.amt+'.');
+  });
+  if(pick)s.push('Собрать на шпажку снизу вверх, шпажка строго по центру.');
+  return s;
+}
+function cookCard(d){
+  var R=RULES[d.t];
+  return '<div class="ck"><h4>Сборка одной штуки</h4><ol class="cks">'+stepsFor(d).map(function(t){return '<li>'+esc(t)+'</li>'}).join('')+'</ol>'+
+   '<div class="ckt"><div><b>Заранее</b><p>'+esc(R.ahead)+'</p></div><div><b>На месте</b><p>'+esc(R.place)+'</p></div><div><b>Хранение</b><p>'+esc(R.store)+'</p></div></div>'+
+   '<h4>Стандарт подачи</h4><p>'+esc(R.std)+'</p><h4>Частые ошибки</h4><ul class="ckm">'+R.bad.map(function(t){return '<li>'+esc(t)+'</li>'}).join('')+'</ul>'+
+   (d.chk?'<p class="warn">Уточнить: '+esc(d.chk)+'</p>':'')+
+   '<p class="hint" style="margin-top:.8rem">Стартовые правила, а не нормы СанПиН: сроки проверьте на своих заказах.</p></div>';
+}
+function renderSheetQty(){
+  var k=state.qty[sheetId]||0;var i=$('#dsIn');if(i&&document.activeElement!==i)i.value=k||'';
+}
+function renderSheet(){
+  var d=dishById(sheetId);if(!d)return;var c=calcDish(d,state.prices);
+  var g=Math.max(1,+state.guests||1);
+  $('#dsBody').innerHTML='<div class="dshead"><div class="dsart">'+artSVG(d.id)+'</div><div><p class="dsk">'+esc(d.t)+(d.prem?' · Премиум':'')+'</p><h3 id="dsT">'+esc(d.n)+'</h3><p class="dsd">'+esc(d.d)+'</p></div></div>'+
+   '<dl class="dsnums"><div><dt>Вес штуки</dt><dd>'+nf0.format(Math.round(c.w))+NB+'г</dd></div><div><dt>Себестоимость</dt><dd>'+nf1.format(c.cost)+NB+'₽</dd></div><div><dt>Гостю ×'+String(d.prem&&state.mkp>0?state.mkp:state.mk).replace('.',',')+'</dt><dd>'+nf0.format(gp(d))+NB+'₽</dd></div></dl>'+
+   '<div class="dsq"><label for="dsIn">В заказ, шт</label><button type="button" data-dq="-1" aria-label="Меньше">−</button><input id="dsIn" type="number" min="0" step="1" inputmode="numeric"><button type="button" data-dq="1" aria-label="Больше">+</button><button type="button" data-dq="10">+10</button><button type="button" data-dset="'+g+'">по 1 на гостя ('+g+')</button></div>'+
+   '<div class="dstabs" role="tablist" aria-label="Карточка"><button role="tab" type="button" data-st="comp" aria-selected="'+(sheetTab==='comp')+'">Состав и цена</button><button role="tab" type="button" data-st="cook" aria-selected="'+(sheetTab==='cook')+'">Повару</button></div>'+
+   '<div id="dsPane">'+(sheetTab==='comp'?detailHTML(d):cookCard(d))+'</div>';
+  renderSheetQty();
+}
+function openSheet(id,tab){
+  sheetId=id;sheetTab=tab||'comp';renderSheet();lastFocus=document.activeElement;
+  sheet$.inert=false;sheet$.classList.add('open');document.body.classList.add('sopen');
+  $('#dsBox').scrollTop=0;setTimeout(function(){$('#dsClose').focus()},80);
+}
+function closeSheet(){
+  if(!sheet$.classList.contains('open'))return;
+  sheet$.classList.remove('open');sheet$.inert=true;document.body.classList.remove('sopen');sheetId=null;
+  if(lastFocus&&lastFocus.focus){try{lastFocus.focus({preventScroll:true})}catch(e){}}
+}
+$('#dsClose').addEventListener('click',closeSheet);
+sheet$.addEventListener('click',function(e){
+  if(e.target===sheet$){closeSheet();return}
+  var t;
+  if((t=e.target.closest('[data-st]'))){sheetTab=t.getAttribute('data-st');renderSheet();return}
+  if((t=e.target.closest('[data-dq]'))){setQty(sheetId,(state.qty[sheetId]||0)+(+t.getAttribute('data-dq')));return}
+  if((t=e.target.closest('[data-dset]'))){setQty(sheetId,+t.getAttribute('data-dset'));return}
+});
+sheet$.addEventListener('input',function(e){if(e.target.id==='dsIn')setQty(sheetId,parseInt(e.target.value,10)||0)});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&sheet$.classList.contains('open'))closeSheet()});
+var sy=null;
+sheet$.addEventListener('touchstart',function(e){sy=($('#dsBox').scrollTop<=0)?e.touches[0].clientY:null},{passive:true});
+sheet$.addEventListener('touchend',function(e){if(sy===null)return;var dy=e.changedTouches[0].clientY-sy;sy=null;if(dy>90)closeSheet()},{passive:true});
+
+/* ---------- повару: правила по группам ---------- */
+function renderRules(){
+  $('#rules').innerHTML=TYPES.map(function(t){
+    var R=RULES[t],d0=DISHES.filter(function(d){return d.t===t})[0],n=DISHES.filter(function(d){return d.t===t}).length;
+    return '<details class="rule"><summary><span class="rart">'+artSVG(d0.id)+'</span><span><h3>'+esc(t)+'</h3><p class="when">'+esc(R.when)+'</p><span class="rn">'+n+' позиций · подробнее</span></span></summary>'+
+     '<dl><div><dt>Заранее</dt><dd>'+esc(R.ahead)+'</dd></div><div><dt>На месте</dt><dd>'+esc(R.place)+'</dd></div><div><dt>Хранение</dt><dd>'+esc(R.store)+'</dd></div><div><dt>Стандарт</dt><dd>'+esc(R.std)+'</dd></div><div><dt>Частые ошибки</dt><dd>'+R.bad.map(esc).join('; ')+'</dd></div></dl></details>';
+  }).join('');
+}
+
+/* ---------- повару: проверка перед выездом ---------- */
+var QK='chefs01_quiz',QZ={st:'start',qs:[],i:0,ok:0,miss:[],picked:null,best:null};
+try{QZ.best=JSON.parse(localStorage.getItem(QK)||'null')}catch(e){}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function orderPool(){var p=DISHES.filter(function(d){return state.qty[d.id]>0});return p}
+function optsOf(ok,wr){var w=[];wr.forEach(function(x){if(x!==ok&&w.indexOf(x)<0&&w.length<2)w.push(x)});return shuffle([ok].concat(w))}
+function makeQ(kind,d){
+  if(kind==='pic'){
+    var same=shuffle(DISHES.filter(function(x){return x.id!==d.id&&x.t===d.t})).concat(shuffle(DISHES.filter(function(x){return x.t!==d.t})));
+    return {art:d.id,q:'Что это за закуска?',ok:d.n,o:optsOf(d.n,same.map(function(x){return x.n})),why:d.d};
+  }
+  if(kind==='gram'){
+    var rs=d.c.filter(function(r){return !ING[r[0]].pk&&r[1]>=2});if(!rs.length)return makeQ('w',d);
+    var r=rs[Math.floor(Math.random()*rs.length)],I0=ING[r[0]],c=qtyText(I0,r[1]);
+    var w=[0.5,1.7,2.4,0.3].map(function(f){return qtyText(I0,Math.max(1,Math.round(r[1]*f)))});
+    return {q:d.n+': сколько здесь «'+lc(I0.n)+'» на одну штуку?',ok:c,o:optsOf(c,w),why:'По карточке: '+lc(I0.n)+' — '+c+' на штуку.'};
+  }
+  if(kind==='when'){
+    var R=RULES[d.t];
+    return {q:d.n+': когда собирать на выезде?',ok:R.when,o:optsOf(R.when,shuffle(TYPES.filter(function(t){return t!==d.t}).map(function(t){return RULES[t].when}))),why:R.place};
+  }
+  var cw=Math.round(calcDish(d,state.prices).w),cs=cw+NB+'г',r5=function(v){return Math.max(5,Math.round(v/5)*5)+NB+'г'};
+  return {q:d.n+': сколько весит одна готовая штука?',ok:cs,o:optsOf(cs,[r5(cw*0.55),r5(cw*1.6),r5(cw*2.2)]),why:'Вес нетто готового изделия: '+cs+'.'};
+}
+function startQuiz(){
+  var p=orderPool();if(!p.length)p=DISHES.slice();
+  var ds=[];while(ds.length<10)ds=ds.concat(shuffle(p.slice()));
+  var kinds=['pic','gram','when','w','gram','pic','w','gram','when','pic'];
+  var seen={},all=shuffle(DISHES.slice()),ai=0;
+  QZ.qs=kinds.map(function(k,i){
+    var q=makeQ(k,ds[i]),n=0;
+    var key=function(x){return x.q+'|'+x.ok};
+    while(seen[key(q)]&&n<6){q=makeQ(k,ds[(i+n+1)%ds.length]);n++}
+    while(seen[key(q)]&&ai<all.length){q=makeQ(k,all[ai++])}
+    seen[key(q)]=1;return q;
+  });QZ.i=0;QZ.ok=0;QZ.miss=[];QZ.picked=null;QZ.st='q';renderQuiz();
+}
+function renderQuiz(){
+  var box=$('#quiz'),h;
+  if(QZ.st==='start'){
+    var p=orderPool();
+    h='<div class="qzhead"><p class="qzk">Проверка перед выездом</p><h3>10 вопросов '+(p.length?'по '+p.length+' позициям вашего заказа':'по всему меню')+'</h3><p class="sub" style="margin:.3rem 0 1rem">Закуска по картинке, граммовка и когда собирать. Зачёт от 90 %.'+(p.length?'':' Собери заказ — вопросы будут только по нему.')+'</p>'+
+     (QZ.best!=null?'<p class="hint">Лучший результат на этом устройстве: '+QZ.best+' %</p>':'')+'</div><button class="btn" type="button" data-qz="start">Начать проверку</button>';
+  }else if(QZ.st==='q'){
+    var q=QZ.qs[QZ.i],ans=QZ.picked!=null;
+    h='<div class="qzbar"><span style="width:'+(QZ.i/QZ.qs.length*100)+'%"></span></div><p class="qzn">Вопрос '+(QZ.i+1)+' из '+QZ.qs.length+'</p>'+
+     (q.art?'<div class="qzart">'+artSVG(q.art)+'</div>':'')+'<h4>'+esc(q.q)+'</h4><div class="qzo">'+
+     q.o.map(function(o,i){var cls=ans?(o===q.ok?' ok':(i===QZ.picked?' bad':'')):'';return '<button type="button" data-qo="'+i+'"'+(ans?' disabled':'')+' class="'+cls.trim()+'">'+esc(o)+'</button>'}).join('')+'</div>'+
+     (ans?'<p class="qzwhy">'+(q.o[QZ.picked]===q.ok?'Верно. ':'Правильно: '+esc(q.ok)+'. ')+esc(q.why)+'</p><button class="btn" type="button" data-qz="next" style="margin-top:.9rem">'+(QZ.i+1<QZ.qs.length?'Дальше':'Результат')+'</button>':'');
+  }else{
+    var pc=Math.round(QZ.ok/QZ.qs.length*100),pass=pc>=90;
+    h='<div class="qzres"><div class="qzring" style="--p:'+pc+'"><b>'+pc+'%</b></div><div><p class="qzk">'+(pass?'Зачёт':'Пока не зачёт')+'</p><h3>'+QZ.ok+' из '+QZ.qs.length+' верно</h3><p class="sub" style="margin:.2rem 0 0">'+(pass?'Можно ехать на выезд.':'Повторите карточки ниже и пройдите ещё раз.')+'</p></div></div>'+
+     (QZ.miss.length?'<ul class="qzmiss">'+QZ.miss.map(function(m){return '<li>'+esc(m.q)+' — <b>'+esc(m.ok)+'</b></li>'}).join('')+'</ul>':'')+
+     '<button class="btn" type="button" data-qz="start" style="margin-top:1rem">Пройти ещё раз</button>';
+  }
+  box.innerHTML=h;
+}
+$('#quiz').addEventListener('click',function(e){
+  var t;
+  if((t=e.target.closest('[data-qz]'))){var a=t.getAttribute('data-qz');
+    if(a==='start'){startQuiz();return}
+    if(a==='next'){QZ.i++;QZ.picked=null;
+      if(QZ.i>=QZ.qs.length){QZ.st='res';var pc=Math.round(QZ.ok/QZ.qs.length*100);if(QZ.best==null||pc>QZ.best){QZ.best=pc;try{localStorage.setItem(QK,JSON.stringify(pc))}catch(_e){}}}
+      renderQuiz();$('#quiz').scrollIntoView({behavior:smooth,block:'nearest'});return}
+  }
+  if((t=e.target.closest('[data-qo]'))&&QZ.st==='q'&&QZ.picked==null){
+    var q=QZ.qs[QZ.i];QZ.picked=+t.getAttribute('data-qo');
+    if(q.o[QZ.picked]===q.ok)QZ.ok++;else QZ.miss.push(q);
+    renderQuiz();
+  }
+});
+
+/* старт */
+document.body.classList.add('v-'+view);
+[].forEach.call(document.querySelectorAll('.views [data-v]'),function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-v')===view))});
+renderRules();renderQuiz();
+
+$('#guests').value=state.guests;
+renderChips();renderLetters();renderTable();renderPrices();refreshOrder();
+
+function sheetDate(){var o=ACT&&oById(ACT);return o&&o.date?oWhen(o):today()}
+function cookMeta(o){return [o.addr?'Адрес: '+o.addr:'',o.phone?'Связь: '+o.phone:'',o.note?'Комментарий: '+o.note:''].filter(Boolean)}
+function cookExtra(){var o=ACT&&oById(ACT);if(!o)return '';var P=planRows(o,sortedItems(orderNow().items)),M=cookMeta(o);
+  return (M.length?'<p class="saddr">'+M.map(esc).join(' · ')+'</p>':'')+(P.length?'<h4>Когда собирать'+(o.time?' · подача в '+esc(o.time):'')+'</h4><table class="st"><tbody>'+P.map(function(p){return '<tr><td class="tl"><b>'+esc(p.t)+'</b></td><td>'+esc(p.w)+'</td></tr>'}).join('')+'</tbody></table>':'')}
+function cookTextExtra(){var o=ACT&&oById(ACT);if(!o)return '';var P=planRows(o,sortedItems(orderNow().items)),M=cookMeta(o);
+  return (M.length?'\n'+M.join('\n'):'')+(P.length?'\n\nКогда собирать'+(o.time?' (подача в '+o.time+')':'')+':\n'+P.map(function(p){return '— '+p.t+': '+p.w}).join('\n'):'')}
+document.addEventListener('input',function(e){var el=e.target;if(!el||!el.classList||!el.classList.contains('q'))return;var o=ACT&&oById(ACT);
+  if(o&&(o.fx||!canEdit)){e.stopPropagation();el.value=state.qty[el.getAttribute('data-id')]||'';toastC('Заказ закреплён — состав не меняется')}},true);
+
+/* ===== Chefs 01 · CRM: заказы, карточка клиента, закрепление цен, план для повара ===== */
+var ODB=null,ORDERS=[],OREADY=false,ACT=null,DRAFT=null,ofilter='work',canEdit=true,oSyncT=0,ocId=null,pendingOpen=null,dbTried=!!(window.claude&&typeof window.claude.use==='function');
+var OST=[['new','Новый'],['ok','Подтверждён'],['ready','Собран'],['done','Доставлен']];
+var OSTN={new:'Новый',ok:'Подтверждён',ready:'Собран',done:'Доставлен',cancel:'Отменён'};
+/* окно сборки по группам: [начать за, закончить за] минут до подачи — стартовые ориентиры */
+var LEAD={'Брускетты':[30,0],'Канапе и шпажки':[120,60],'Тарталетки':[60,30],'Салаты в стаканчиках':[120,60],'Бранч-бокс':[60,45]};
+function toastC(t){var x=document.getElementById('ctoast');if(!x){x=document.createElement('div');x.id='ctoast';x.className='ctoast';x.setAttribute('role','status');document.body.appendChild(x)}
+  x.textContent=t;x.classList.add('on');clearTimeout(toastC.t);toastC.t=setTimeout(function(){x.classList.remove('on')},2600)}
+function oById(id){for(var i=0;i<ORDERS.length;i++)if(ORDERS[i].id===id)return ORDERS[i];return null}
+function effPrices(){var m={};Object.keys(ING).forEach(function(k){m[k]=state.prices[k]!=null?+state.prices[k]:ING[k].price});return m}
+function oCalc(o){var fx=o.fx;return orderCalc(o.items||{},fx?fx.prices:state.prices,fx?fx.mk:state.mk,fx?fx.mkp:state.mkp,o.cook!=null?o.cook:state.cook)}
+function fmtD(iso){if(!iso)return '';var p=String(iso).split('-');try{return new Date(+p[0],+p[1]-1,+p[2]).toLocaleDateString('ru-RU',{day:'numeric',month:'long'})}catch(e){return iso}}
+function fmtDw(iso){if(!iso)return '';var p=String(iso).split('-');try{return new Date(+p[0],+p[1]-1,+p[2]).toLocaleDateString('ru-RU',{weekday:'short',day:'numeric',month:'short'}).replace(/\./g,'')}catch(e){return iso}}
+function oWhen(o){return o.date?fmtD(o.date)+(o.time?', '+o.time:''):(o.time||'')}
+function oTitle(o){return '№'+o.n+(o.name?' · '+o.name:'')+(o.date?' · '+oWhen(o):'')}
+function hm(m){m=((m%1440)+1440)%1440;return ('0'+Math.floor(m/60)).slice(-2)+':'+('0'+(m%60)).slice(-2)}
+function toMin(t){var p=String(t||'').split(':');return p.length===2?(+p[0])*60+(+p[1]):null}
+function qtyOnly(q){var o={};for(var k in q)if(q[k]>0)o[k]=q[k];return o}
+function itemsCount(o){var n=0;for(var k in (o.items||{}))n+=+o.items[k]||0;return n}
+
+/* корзина меню = открытый заказ; черновик и свои цены не теряются */
+var _persist=persist;
+persist=function(){if(!ACT){_persist();return}
+  var save={qty:DRAFT?DRAFT.qty:{},prices:state.prices,guests:DRAFT?DRAFT.guests:20,mk:state.mk,mkp:state.mkp,cook:state.cook,ev:DRAFT?DRAFT.ev:''};
+  try{localStorage.setItem(KEY,JSON.stringify(save))}catch(e){}
+  oSchedule()};
+function oSchedule(){var o=ACT&&oById(ACT);if(!o||o.fx||!ODB||!canEdit)return;clearTimeout(oSyncT);oSyncT=setTimeout(oFlush,600)}
+function oFlush(){clearTimeout(oSyncT);oSyncT=0;var o=ACT&&oById(ACT);if(!o||o.fx||!ODB||!canEdit)return Promise.resolve();
+  return ODB.doc('orders/'+ACT).update({items:qtyOnly(state.qty),guests:Math.max(1,+state.guests||20),updated:Date.now()}).catch(function(){toastC('Заказ не сохранился, проверь связь')})}
+var _setQty=setQty;
+setQty=function(id,v){var o=ACT&&oById(ACT);
+  if(o&&(o.fx||!canEdit)){toastC(canEdit?'Заказ закреплён. Чтобы менять состав, верни его в «Новые».':'Состав меняет только Евгений');syncTiles(id);var inp=document.getElementById('q-'+id);if(inp)inp.value=state.qty[id]||'';return}
+  _setQty(id,v)};
+function oActivate(id,quiet){var o=oById(id);if(!o)return;if(ACT&&ACT!==id)oFlush();
+  if(!ACT)DRAFT={qty:state.qty,guests:state.guests,ev:state.ev};
+  ACT=id;state.qty=Object.assign({},o.items||{});state.guests=o.guests||20;state.ev=oTitle(o);
+  var g=$('#guests');if(g)g.value=state.guests;renderTable();refreshOrder();renderAct();renderOrders();
+  if(!quiet)toastC('Заказ №'+o.n+' открыт в меню'+(o.fx?' — только просмотр, цены закреплены':''))}
+function oDeactivate(){if(!ACT)return;oFlush();ACT=null;
+  state.qty=DRAFT?DRAFT.qty:{};state.guests=DRAFT?DRAFT.guests:20;state.ev=DRAFT?DRAFT.ev:'';DRAFT=null;_persist();
+  var g=$('#guests');if(g)g.value=state.guests;renderTable();refreshOrder();renderAct();renderOrders()}
+function renderAct(){try{fillFields()}catch(e){}var o=ACT&&oById(ACT),b=$('#actB');document.body.classList.toggle('oact',!!o);
+  if(b){b.hidden=!o;if(o){$('#actT').textContent='Заказ '+oTitle(o);$('#actS').textContent=o.fx?'цены закреплены, состав не меняется':'меняй состав плюсами — сохраняется само'}}
+  var t=$('#toOrder');if(t)t.hidden=!!o||!canEdit}
+function oCreate(){if(!ODB){toastC(dbTried?'Хранилище не отвечает, попробуй ещё раз':'Заказы сохраняются, когда Chefs 01 открыт в Claude');return}
+  if(!canEdit)return;if(ACT)oDeactivate();
+  var n=ORDERS.reduce(function(m,o){return Math.max(m,+o.n||0)},0)+1;
+  var doc={n:n,status:'new',name:'',phone:'',date:'',time:'',addr:'',guests:Math.max(1,+state.guests||20),prepay:0,note:'',items:qtyOnly(state.qty),fx:null,cook:null,created:Date.now(),updated:Date.now()};
+  ODB.collection('orders').add(doc).then(function(ref){
+    DRAFT={qty:{},guests:state.guests,ev:''};ACT=ref.id;state.ev='№'+n;persist();pendingOpen=ref.id;
+    if(oById(ref.id)){onOrders()}else{renderAct()}
+    toastC('Заказ №'+n+' создан. Заполни клиента и дату.')},function(){toastC('Не получилось создать заказ, попробуй ещё раз')})}
+
+/* список заказов */
+function oVisible(o){if(!canEdit&&(o.status==='new'||o.status==='cancel'))return false;
+  if(ofilter==='work')return o.status!=='done'&&o.status!=='cancel';if(ofilter==='done')return o.status==='done';return true}
+function renderOrders(){var box=$('#oList');if(!box)return;
+  if(!ODB){box.innerHTML='<p class="empty osm">'+(dbTried&&!OREADY?'Загружаю заказы…':'Заказы сохраняются, когда Chefs 01 открыт в Claude под твоим аккаунтом.')+'</p>';$('#oChips').innerHTML='';return}
+  if(!OREADY){box.innerHTML='<p class="empty osm">Загружаю заказы…</p>';return}
+  var base=ORDERS.filter(function(o){return canEdit||(o.status!=='new'&&o.status!=='cancel')}),cnt={work:0,done:0,all:base.length};
+  base.forEach(function(o){if(o.status==='done')cnt.done++;else if(o.status!=='cancel')cnt.work++});
+  $('#oChips').innerHTML=[['work','В работе'],['done','Доставлены'],['all','Все']].map(function(c){return '<button type="button" class="chip-b" data-of="'+c[0]+'" aria-pressed="'+(ofilter===c[0])+'">'+c[1]+'<span class="n">'+cnt[c[0]]+'</span></button>'}).join('');
+  var L=base.filter(oVisible);
+  if(ofilter==='work')L.sort(function(a,b){return (a.date||'9999')<(b.date||'9999')?-1:(a.date||'9999')>(b.date||'9999')?1:((a.time||'')<(b.time||'')?-1:1)});
+  if(!L.length){box.innerHTML='<p class="empty osm">'+(ORDERS.length?'Здесь пусто. Посмотри во вкладке «Все».':canEdit?'Пока заказов нет. Собери закуски в меню и нажми «Оформить».':'Подтверждённых заказов пока нет.')+'</p>';return}
+  box.innerHTML=L.map(function(o){var C=oCalc(o);
+    return '<button type="button" class="orow st-'+o.status+(o.id===ACT?' act':'')+'" data-oid="'+o.id+'"><span class="onum">№'+o.n+'</span>'+
+      '<span class="omid"><b>'+esc(o.name||'Без имени')+'</b><span>'+(o.date?esc(fmtDw(o.date))+(o.time?' · '+esc(o.time):''):'дата не указана')+' · '+(o.guests||'—')+NB+'гост.</span></span>'+
+      '<span class="oend"><b>'+(canEdit?rub0(C.rev):nf0.format(C.pcs)+NB+'шт')+'</b><span class="opill">'+OSTN[o.status]+(o.fx&&o.status==='ok'?' ✓':'')+'</span></span></button>'}).join('')}
+
+/* карточка заказа */
+var osEl=$('#ocard');
+function planRows(o,items){var types=[];items.forEach(function(it){if(types.indexOf(it.d.t)<0)types.push(it.d.t)});types.sort(function(a,b){return TYPES.indexOf(a)-TYPES.indexOf(b)});
+  var sv=toMin(o.time);return types.map(function(t){var L=LEAD[t]||[60,30],R=RULES[t]||{},w;
+    if(sv==null)w=R.when||'';else if(L[1]===0)w='на месте, не раньше '+hm(sv-L[0]);else w='собрать '+hm(sv-L[0])+'–'+hm(sv-L[1]);
+    return{t:t,w:w,hint:R.when||''}})}
+function cardHTML(o){var C=oCalc(o),ro=!canEdit,its=sortedItems(C.items),pre=+o.prepay||0,idx=-1;OST.forEach(function(s,i){if(s[0]===o.status)idx=i});
+  var dis=ro?' disabled':'';
+  function fld(id,label,val,type,extra,wide){return '<label class="ofl'+(wide?' wide':'')+'"><span>'+label+'</span><input id="'+id+'" type="'+(type||'text')+'" value="'+esc(val==null?'':val)+'"'+(extra||'')+dis+' autocomplete="off"></label>'}
+  var h='<div class="ost'+(o.status==='cancel'?' cancel':'')+'" role="list" aria-label="Статус заказа">'+OST.map(function(s,i){return '<span role="listitem" class="'+(o.status==='cancel'?'':i<idx?'past':i===idx?'cur':'')+'">'+s[1]+'</span>'}).join('')+'</div>';
+  if(o.status==='cancel')h+='<p class="ocancel">Заказ отменён</p>';
+  h+='<div class="ogrp"><h3>Клиент</h3><div class="ofields">'+fld('ocName','Имя',o.name,'text',' maxlength="80" placeholder="Как зовут"')+fld('ocPhone','Телефон или Telegram',o.phone,'text',' maxlength="60" inputmode="tel" placeholder="+7… или @ник"')+'</div></div>';
+  h+='<div class="ogrp"><h3>Когда и куда</h3><div class="ofields">'+fld('ocDate','Дата',o.date,'date')+fld('ocTime','Время подачи',o.time,'time')+fld('ocAddr','Адрес',o.addr,'text',' maxlength="160" placeholder="Город, улица, дом, подъезд"',true)+
+    fld('ocGuests','Гостей',o.guests,'text',' inputmode="numeric" maxlength="4"')+fld('ocPre','Предоплата, ₽',pre?nf0.format(pre):'','text',' inputmode="numeric" placeholder="0"')+
+    '<label class="ofl wide"><span>Комментарий</span><textarea id="ocNote" maxlength="600" rows="2" placeholder="Повод, пожелания, аллергии, как подъехать"'+dis+'>'+esc(o.note||'')+'</textarea></label></div></div>';
+  h+='<div class="ogrp"><div class="ogh"><h3>Состав</h3><span class="hint">'+nf0.format(C.pcs)+NB+'шт'+(o.fx?' · цены закреплены '+new Date(o.fx.at).toLocaleDateString('ru-RU',{day:'numeric',month:'short'}).replace('.',''):'')+'</span></div>';
+  h+=its.length?'<ul class="oitems">'+its.map(function(it){return '<li><span class="oia">'+artSVG(it.d.id)+'</span><span class="oin">'+esc(it.d.n)+'</span><span class="oiq">'+it.k+NB+'×'+NB+nf0.format(it.p)+'</span><b>'+rub0(it.sum)+'</b></li>'}).join('')+'</ul>':'<p class="hint">Пока пусто. Нажми «Изменить состав» и добавь закуски плюсами.</p>';
+  if(!ro&&!o.fx&&o.status!=='cancel')h+='<button class="btn ghost osmb" type="button" data-oa="edit">Изменить состав в меню</button>';
+  h+='</div>';
+  h+='<div class="ogrp otot"><div class="erow"><span>Для гостя</span><b>'+rub0(C.rev)+'</b></div><div class="erow"><span>Предоплата</span><b>'+rub0(pre)+'</b></div><div class="erow tot"><span>К оплате на месте</span><b>'+rub0(Math.max(0,C.rev-pre))+'</b></div>'+
+    (ro?'':'<details class="oecon"><summary>Экономика заказа</summary><div class="erow"><span>Закупка по упаковкам</span><b>−'+NB+rub0(C.buy)+'</b></div><div class="erow"><span>Смена повара</span><b>−'+NB+rub0(C.cook)+'</b></div><div class="erow tot'+(C.left<0?' neg':'')+'"><span>Остаётся</span><b>'+rub0(C.left)+'</b></div></details>')+'</div>';
+  var P=planRows(o,its);
+  if(P.length)h+='<div class="ogrp"><h3>Повару: когда собирать</h3><p class="hint">'+(o.time?'Подача в '+esc(o.time)+'. ':'Укажи время подачи — посчитаю окна сборки. ')+'Ориентиры, поправь по опыту.</p><ul class="oplan">'+P.map(function(p){return '<li><b>'+esc(p.t)+'</b><span>'+esc(p.w)+'</span></li>'}).join('')+'</ul></div>';
+  h+='<div class="oacts">';
+  if(!ro){if(o.status==='new')h+='<button class="btn" type="button" data-oa="confirm">Подтвердить и закрепить цены</button>';
+    else if(o.status==='ok')h+='<button class="btn" type="button" data-oa="ready">Собран</button>';
+    else if(o.status==='ready')h+='<button class="btn" type="button" data-oa="done">Доставлен</button>';
+    else if(o.status==='cancel')h+='<button class="btn" type="button" data-oa="restore">Вернуть в работу</button>'}
+  h+='<button class="btn ghost" type="button" data-oa="cook">Лист повару</button>'+(ro?'':'<button class="btn ghost" type="button" data-oa="guest">Лист гостю</button>')+'</div>';
+  if(!ro){h+='<div class="oacts sec">';
+    if(o.status==='ok')h+='<button class="lnk" type="button" data-oa="unfix">Вернуть в «Новые» и открыть цены</button>';
+    if(o.status==='ready')h+='<button class="lnk" type="button" data-oa="back">Назад: подтверждён</button>';
+    if(o.status==='done')h+='<button class="lnk" type="button" data-oa="back">Назад: собран</button>';
+    if(o.status!=='cancel'&&o.status!=='done')h+='<button class="lnk" type="button" data-oa="cancel">Отменить заказ</button>';
+    h+='<button class="lnk del" type="button" data-oa="del">Удалить заказ</button></div>'}
+  return h}
+function renderCard(){var o=ocId&&oById(ocId);if(!o){if(ocId&&OREADY)closeCard();return}
+  $('#ocT').textContent='Заказ №'+o.n;$('#ocS').textContent=OSTN[o.status]+(o.updated?' · изменён '+new Date(o.updated).toLocaleString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}).replace('.',''):'');
+  var ae=document.activeElement,box=$('#ocBody');if(ae&&box.contains(ae)&&/INPUT|TEXTAREA/.test(ae.tagName))return;box.innerHTML=cardHTML(o)}
+function openCard(id){ocId=id;var o=oById(id);if(!o)return;renderCard();osEl.inert=false;osEl.classList.add('open');document.body.classList.add('oopen');$('#ocBox').scrollTop=0;setTimeout(function(){$('#ocClose').focus()},60)}
+function closeCard(){if(!osEl.classList.contains('open'))return;osEl.classList.remove('open');osEl.inert=true;document.body.classList.remove('oopen');ocId=null}
+function oUpd(o,patch,msg){if(!ODB||!canEdit)return Promise.resolve();patch.updated=Date.now();return ODB.doc('orders/'+o.id).update(patch).then(function(){if(msg)toastC(msg)},function(){toastC('Не сохранилось, попробуй ещё раз')})}
+var FMAP={ocName:['name','s'],ocPhone:['phone','s'],ocDate:['date','s'],ocTime:['time','s'],ocAddr:['addr','s'],ocGuests:['guests','n'],ocPre:['prepay','n'],ocNote:['note','s']};
+$('#ocBody').addEventListener('change',function(e){var f=FMAP[e.target.id],o=ocId&&oById(ocId);if(!f||!o)return;
+  var v=f[1]==='n'?Math.max(0,Math.round(+String(e.target.value).replace(/[^\d]/g,'')||0)):String(e.target.value).trim();
+  if(f[0]==='guests'&&!v)v=o.guests||20;var p={};p[f[0]]=v;
+  if(f[0]==='prepay')e.target.value=v?nf0.format(v):'';
+  if(f[0]==='guests'&&ACT===o.id){state.guests=v;var g=$('#guests');if(g)g.value=v;renderBar()}
+  oUpd(o,p)});
+$('#ocBody').addEventListener('click',function(e){var b=e.target.closest('[data-oa]'),o=ocId&&oById(ocId);if(!b||!o)return;var a=b.getAttribute('data-oa');
+  if(a==='edit'){oActivate(o.id);closeCard();setTimeout(function(){$('#menu').scrollIntoView({behavior:smooth,block:'start'})},120);return}
+  if(a==='cook'||a==='guest'){if(ACT!==o.id)oActivate(o.id,true);closeCard();setTimeout(function(){openCalc();setSheet(a)},140);return}
+  if(a==='confirm'){if(!itemsCount(o)){toastC('Сначала добавь закуски в состав');return}if(!o.date){toastC('Укажи дату заказа');var d=$('#ocDate');if(d)d.focus();return}
+    var go=function(){oUpd(o,{status:'ok',fx:{prices:effPrices(),mk:state.mk,mkp:state.mkp||'',at:Date.now()},cook:state.cook},'Заказ подтверждён, цены закреплены')};
+    if(ACT===o.id&&oSyncT){oFlush().then(go)}else go();return}
+  if(a==='ready'){oUpd(o,{status:'ready'},'Отмечено: собран');return}
+  if(a==='done'){oUpd(o,{status:'done'},'Отмечено: доставлен');return}
+  if(a==='back'){oUpd(o,{status:o.status==='done'?'ready':'ok'});return}
+  if(a==='restore'){oUpd(o,{status:o.fx?'ok':'new'},'Заказ снова в работе');return}
+  if(a==='unfix'||a==='cancel'||a==='del'){
+    if(!b.classList.contains('arm')){var t0=b.textContent;b.classList.add('arm');b.textContent=a==='del'?'Точно удалить? Нажми ещё раз':a==='cancel'?'Точно отменить? Нажми ещё раз':'Цены пересчитаются по текущим. Нажми ещё раз';setTimeout(function(){b.classList.remove('arm');b.textContent=t0},4000);return}
+    if(a==='unfix'){oUpd(o,{status:'new',fx:null,cook:null},'Заказ снова новый, цены открыты');return}
+    if(a==='cancel'){oUpd(o,{status:'cancel'},'Заказ отменён');return}
+    if(a==='del'){if(ACT===o.id)oDeactivate();ODB.doc('orders/'+o.id).delete().then(function(){toastC('Заказ удалён');closeCard()},function(){toastC('Не получилось удалить')})}}});
+$('#ocClose').addEventListener('click',closeCard);
+osEl.addEventListener('click',function(e){if(e.target===osEl)closeCard()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&osEl.classList.contains('open')&&!calcOpen)closeCard()});
+$('#oList').addEventListener('click',function(e){var r=e.target.closest('[data-oid]');if(r)openCard(r.getAttribute('data-oid'))});
+$('#oChips').addEventListener('click',function(e){var b=e.target.closest('[data-of]');if(b){ofilter=b.getAttribute('data-of');renderOrders()}});
+$('#oNew').addEventListener('click',oCreate);
+$('#toOrder').addEventListener('click',oCreate);
+$('#actCard').addEventListener('click',function(){if(ACT)openCard(ACT)});
+$('#actDone').addEventListener('click',function(){var o=ACT&&oById(ACT);oDeactivate();if(o)toastC('Заказ №'+o.n+' сохранён и закрыт')});
+$('#shopCard').addEventListener('click',function(e){if(e.target.id==='clearOrder'){var o=ACT&&oById(ACT);if(o&&o.fx){e.stopPropagation();toastC('Заказ закреплён — состав не меняется')}}},true);
+function onOrders(){renderOrders();
+  if(ACT){var a=oById(ACT);if(!a&&OREADY&&!pendingOpen){ACT=null;state.qty=DRAFT?DRAFT.qty:{};state.guests=DRAFT?DRAFT.guests:20;state.ev=DRAFT?DRAFT.ev:'';DRAFT=null;_persist();renderTable();refreshOrder()}else if(a){state.ev=oTitle(a)}}
+  renderAct();if(calcOpen)renderCalc();
+  if(pendingOpen&&oById(pendingOpen)){var id=pendingOpen;pendingOpen=null;openCard(id)}else if(ocId)renderCard()}
+function applyRole(){document.body.classList.toggle('ro',!canEdit);renderAct();renderOrders();if(ocId)renderCard()}
+
+function localDB(){var K='chefs01_db',D={},subs=[];try{D=JSON.parse(localStorage.getItem(K)||'{}')||{}}catch(e){D={}}
+  function save(){try{localStorage.setItem(K,JSON.stringify(D))}catch(e){toastC('Память приложения заполнена — сохрани копию заказов')}}
+  function clone(x){return JSON.parse(JSON.stringify(x))}
+  function notify(){subs.forEach(function(f){setTimeout(f,0)})}
+  function uid(){return 'o'+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+  function snap(c,q){var docs=Object.keys(D).filter(function(k){return k.indexOf(c+'/')===0&&k.split('/').length===2}).map(function(k){var d=D[k];return{id:k.split('/')[1],exists:true,data:function(){return clone(d)}}});
+    if(q.f)docs.sort(function(a,b){var x=a.data()[q.f],y=b.data()[q.f];return (x<y?-1:x>y?1:0)*(q.dir==='desc'?-1:1)});if(q.n)docs=docs.slice(0,q.n);return{docs:docs,size:docs.length,empty:!docs.length}}
+  function doc(p){return{id:p.split('/').pop(),path:p,
+    get:function(){var d=D[p];return Promise.resolve({id:p.split('/').pop(),exists:!!d,data:function(){return d?clone(d):undefined}})},
+    set:function(d){D[p]=clone(d);save();notify();return Promise.resolve()},
+    update:function(d){if(!D[p])return Promise.reject({code:'invalid_argument'});var o=D[p];Object.keys(d).forEach(function(k){o[k]=d[k]==null?d[k]:clone(d[k])});save();notify();return Promise.resolve()},
+    delete:function(){delete D[p];save();notify();return Promise.resolve()}}}
+  function coll(c,q){q=q||{};return{orderBy:function(f,dir){return coll(c,{f:f,dir:dir,n:q.n})},limit:function(n){return coll(c,{f:q.f,dir:q.dir,n:n})},
+    doc:function(id){return doc(c+'/'+(id||uid()))},add:function(d){var r=doc(c+'/'+uid());return r.set(d).then(function(){return r})},
+    onSnapshot:function(fn){var run=function(){fn(snap(c,q))};subs.push(run);setTimeout(run,0);return function(){}}}}
+  window.addEventListener('storage',function(e){if(e.key===K){try{D=JSON.parse(e.newValue||'{}')||{}}catch(_e){}notify()}});
+  return{collection:function(c){return coll(c)},doc:doc}}
+function oExport(){var data=JSON.stringify({app:'chefs01',v:1,at:new Date().toISOString(),orders:ORDERS},null,1),name='chefs01-zakazy-'+isoDate()+'.json';
+  try{var f=new File([data],name,{type:'application/json'});if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:'Копия заказов Chefs 01'}).catch(function(){});return}}catch(e){}
+  var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1500)}
+function oImport(file){var r=new FileReader();r.onload=function(){try{var j=JSON.parse(r.result),L=(j&&j.orders)||[],n=0;
+    L.forEach(function(o){if(!o||!o.id||!o.n)return;var cur=oById(o.id);if(cur&&(+cur.updated||0)>=(+o.updated||0))return;var d=Object.assign({},o);delete d.id;ODB.doc('orders/'+o.id).set(d);n++});
+    toastC(n?'Загружено заказов: '+n:'Новых заказов в копии нет')}catch(e){toastC('Не получилось прочитать файл копии')}};r.readAsText(file)}
+dbTried=false;ODB=localDB();
+ODB.collection('orders').orderBy('created','desc').limit(500).onSnapshot(function(snap){ORDERS=snap.docs.map(function(x){var o=Object.assign({},x.data());o.id=x.id;return o});OREADY=true;onOrders()});
+$('#oExp').addEventListener('click',function(){if(!ORDERS.length){toastC('Заказов пока нет');return}oExport()});
+$('#oImp').addEventListener('change',function(e){var f=e.target.files&&e.target.files[0];if(f)oImport(f);e.target.value=''});
+renderOrders();renderAct();
+try{if(false&&dbTried){
+  window.claude.use('db').then(function(db){if(!db){dbTried=false;renderOrders();return}ODB=db;
+    db.collection('orders').orderBy('created','desc').limit(300).onSnapshot(function(snap){ORDERS=snap.docs.map(function(x){var o=Object.assign({},x.data());o.id=x.id;return o});OREADY=true;onOrders()},
+      function(){OREADY=true;ORDERS=[];renderOrders()});
+    window.claude.use('user').then(function(u){if(u&&typeof u.canEdit==='function')u.canEdit().then(function(ok){canEdit=ok!==false;applyRole()},function(){})},function(){})},
+  function(){dbTried=false;renderOrders()})}}catch(e){}
+
+})();
+
+</script>
+
+<script>
+if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})}
+</script>
+</body>
+</html>
